@@ -1,5 +1,49 @@
 <?php
 $servers = $info['servers'];
+$servers_on_months = array(["Jan",0],["Feb",0],["March",0],["Apr",0],["May",0],["Jun",0],[ "Jul",0],["Aug",0],["Sep",0],[ "Oct",0],["Nov",0],["Dec",0]);
+if(count($servers) > 0){
+    for($i=0; $i<count($servers);$i++){
+        $mon = date("m",strtotime($servers[$i]["serverCreatedOn"]));
+        switch($mon){
+            case 01:
+                $servers_on_months[0][1] =  $servers_on_months[0][1]+1;
+                break;
+            case 02:
+                $servers_on_months[1][1] =  $servers_on_months[1][1]+1;
+                break;
+            case 03:
+                $servers_on_months[2][1] =  $servers_on_months[2][1]+1;
+                break;
+            case 04:
+                $servers_on_months[3][1] =  $servers_on_months[3][1]+1;
+                break;
+            case 05:
+                $servers_on_months[4][1] =  $servers_on_months[4][1]+1;
+                break;
+            case 06:
+                $servers_on_months[5][1] =  $servers_on_months[5][1]+1;
+                break;
+            case 07:
+                $servers_on_months[6][1] =  $servers_on_months[6][1]+1;
+                break;
+            case 8:
+                $servers_on_months[7][1] =  $servers_on_months[7][1]+1;
+                break;
+            case 9:
+                $servers_on_months[8][1] =  $servers_on_months[8][1]+1;
+                break;
+            case 10:
+                $servers_on_months[9][1] =  $servers_on_months[9][1]+1;
+                break;
+            case 11:
+                $servers_on_months[10][1] =  $servers_on_months[10][1]+1;
+                break;
+            case 12:
+                $servers_on_months[11][1] =  $servers_on_months[11][1]+1;
+                break;
+        }
+    }
+}
 
 ?>
 
@@ -14,6 +58,26 @@ $servers = $info['servers'];
         <title>MTD | Servers</title>
 
         <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {packages: ['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                // Define the chart to be drawn.
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Month');
+                data.addColumn('number', 'Count');
+                data.addRows(<?php echo(json_encode($servers_on_months)) ?>);
+                var options = {'title':'Number of Servers Used per Month in the year 2018',
+                    'orientation': 'horizontal',
+                    'width':'100%',
+                    'height':500};
+                // Instantiate and draw the chart.
+                var chart = new google.visualization.BarChart(document.getElementById('ServersBarChart'));
+                chart.draw(data, options);
+            }
+        </script>
 
         <style>
             .info-box-number{
@@ -131,10 +195,9 @@ $servers = $info['servers'];
                             </div>
                         </div>
                         <div class="box-body">
-                            <div id="bar-chart" style="height: 300px;"></div>
+                            <div id="ServersBarChart" height="500px"/>
 
-                            <div id="chart-div"></div>
-                            {!! $lava->render('BarChart', 'servers', 'chart-div') !!}
+
 
 
                         </div>
