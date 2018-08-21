@@ -1,6 +1,19 @@
 <?php
 $qvms = $info['qvms'];
-
+$qvms_used_on_months = array(["Jan",0],["Feb",0],["March",0],["Apr",0],["May",0],["Jun",0],[ "Jul",0],["Aug",0],["Sep",0],[ "Oct",0],["Nov",0],["Dec",0]);
+$attackers_types=array(["Active Attacker's",0],["In Active Attacker's",0]);
+if(count($qvms) > 0){
+    for($i=0; $i<count($qvms);$i++){
+        $mon = date("m",strtotime($qvms[$i]["qvmStartTime"]));
+        $qvms_used_on_months[$mon-1][1] =  $qvms_used_on_months[$mon-1][1]+1;
+        if(($qvms[$i]["currentlyActive"])>0){
+            $attackers_types[0][1]=$attackers_types[0][1]+1;
+        }
+        else{
+            $attackers_types[1][1]=$attackers_types[1][1]+1;
+        }
+    }
+}
 ?>
 
 
@@ -14,7 +27,39 @@ $qvms = $info['qvms'];
         <title>MTD | QVMs</title>
 
         <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {packages: ['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
 
+            function drawChart() {
+                // Define the chart to be drawn.
+                var data1 = new google.visualization.DataTable();
+                data1.addColumn('string', 'QVMS');
+                data1.addColumn('number', 'No of Attackers');
+                data1.addRows(<?php echo(json_encode($attackers_types))?>);
+                var options1 = {'title':'Number of Attackers Active/Inactive per Month in the year 2018',
+                    'orientation': 'horizontal',
+                    'width':'100%',
+                    'height':500};
+                // Instantiate and draw the chart.
+                var chart1 = new google.visualization.PieChart(document.getElementById('ActiveAttackersPieChart'));
+                chart1.draw(data1, options1);
+                //active qvms
+                var data2 = new google.visualization.DataTable();
+                data2.addColumn('string', 'Month');
+                data2.addColumn('number', 'No of QVMS');
+                data2.addRows(<?php echo(json_encode($qvms_used_on_months)) ?>);
+                var options2 = {'title':'Number of QVMS Active per Month in the year 2018',
+                    'orientation': 'horizontal',
+                    'width':'100%',
+                    'height':500};
+                // Instantiate and draw the chart.
+                var chart2 = new google.visualization.BarChart(document.getElementById('ActiveQVMSBarChart'));
+                chart2.draw(data2, options2);
+
+            }
+        </script>
         <style>
             .info-box-number{
                 font-size:32px;
@@ -103,7 +148,7 @@ $qvms = $info['qvms'];
                         <div class="box-header with-border">
                             <i class="fa fa-bar-chart-o"></i>
 
-                            <h3 class="box-title">Number of Servers Used per Month</h3>
+                            <h3 class="box-title">Number of QVM's and Attackers Active Per Month</h3>
 
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -112,8 +157,15 @@ $qvms = $info['qvms'];
                             </div>
                         </div>
                         <div class="box-body">
+                            <div id="ActiveAttackersPieChart" style="height:500px;"></div>
+                        </div>
+                        <div class="box-body">
+                            <div id="ActiveQVMSBarChart" style="height:500px;"></div>
+                        </div>
+                        <div class="box-body">
                             <div id="bar-chart" style="height: 300px;"></div>
                         </div>
+
                         <!-- /.box-body-->
                     </div>
                 </div>

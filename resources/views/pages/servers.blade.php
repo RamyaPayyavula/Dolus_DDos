@@ -4,44 +4,7 @@ $servers_on_months = array(["Jan",0],["Feb",0],["March",0],["Apr",0],["May",0],[
 if(count($servers) > 0){
     for($i=0; $i<count($servers);$i++){
         $mon = date("m",strtotime($servers[$i]["serverCreatedOn"]));
-        switch($mon){
-            case 01:
-                $servers_on_months[0][1] =  $servers_on_months[0][1]+1;
-                break;
-            case 02:
-                $servers_on_months[1][1] =  $servers_on_months[1][1]+1;
-                break;
-            case 03:
-                $servers_on_months[2][1] =  $servers_on_months[2][1]+1;
-                break;
-            case 04:
-                $servers_on_months[3][1] =  $servers_on_months[3][1]+1;
-                break;
-            case 05:
-                $servers_on_months[4][1] =  $servers_on_months[4][1]+1;
-                break;
-            case 06:
-                $servers_on_months[5][1] =  $servers_on_months[5][1]+1;
-                break;
-            case 07:
-                $servers_on_months[6][1] =  $servers_on_months[6][1]+1;
-                break;
-            case 8:
-                $servers_on_months[7][1] =  $servers_on_months[7][1]+1;
-                break;
-            case 9:
-                $servers_on_months[8][1] =  $servers_on_months[8][1]+1;
-                break;
-            case 10:
-                $servers_on_months[9][1] =  $servers_on_months[9][1]+1;
-                break;
-            case 11:
-                $servers_on_months[10][1] =  $servers_on_months[10][1]+1;
-                break;
-            case 12:
-                $servers_on_months[11][1] =  $servers_on_months[11][1]+1;
-                break;
-        }
+        $servers_on_months[$mon-1][1] =  $servers_on_months[$mon-1][1]+1;
     }
 }
 
@@ -69,7 +32,7 @@ if(count($servers) > 0){
                 data.addColumn('string', 'Month');
                 data.addColumn('number', 'Count');
                 data.addRows(<?php echo(json_encode($servers_on_months)) ?>);
-                var options = {'title':'Number of Servers Used per Month in the year 2018',
+                var options = {'title':'Number of Servers Live per Month in the year 2018',
                     'orientation': 'horizontal',
                     'width':'100%',
                     'height':500};
@@ -186,7 +149,7 @@ if(count($servers) > 0){
                         <div class="box-header with-border">
                             <i class="fa fa-bar-chart-o"></i>
 
-                            <h3 class="box-title">Number of Servers Used per Month</h3>
+                            <h3 class="box-title">Number of Servers Live per Month</h3>
 
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>

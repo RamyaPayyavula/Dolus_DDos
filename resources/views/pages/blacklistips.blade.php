@@ -48,7 +48,7 @@ $blacklistips = $info['blacklistIps'];
                                 <table id="attackHistory" class="table table-bordered table-condensed table-striped">
                                     <thead>
                                     <tr>
-                                        <th class="text-center">IP Address</th>
+                                        <th class="text-center">$user IP</th>
                                         <th class="text-center">Mac Address</th>
                                         <th class="text-center">Blacklisted On</th>
                                     </tr>
@@ -59,12 +59,12 @@ $blacklistips = $info['blacklistIps'];
                                     // Append Body
                                     if(count($blacklistips) > 0){
                                         for($i=0; $i<count($blacklistips);$i++){
-                                            $ipAddress = $blacklistips[$i]["ipAddress"];
+                                            $userIP = $blacklistips[$i]["userIP"];
                                             $macAddress = $blacklistips[$i]["macAddress"];
                                             $blacklistedOn = $blacklistips[$i]["blacklistedOn"];
                                             // Create Table Row
                                             echo "<tr>";
-                                            echo "<td>".$ipAddress."</td>";
+                                            echo "<td>".$userIP."</td>";
                                             echo "<td>".$macAddress."</td>";
                                             echo "<td>".$blacklistedOn."</td>";
                                              echo "</tr>";

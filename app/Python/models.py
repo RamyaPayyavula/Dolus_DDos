@@ -35,7 +35,7 @@ class Attackhistory(Base):
 
 class Blacklist(Base):
     __tablename__ = 'blacklist'
-    ipAddress = Column('ipAddress',String(20), primary_key=True)
+    ipAddressuserIP = Column('ipAddress',String(20), primary_key=True)
     macAddress = Column('macAddress', String(20), nullable=True)
     blacklistedOn = Column('blacklistedOn',DateTime, nullable= True)
 
@@ -194,9 +194,10 @@ class Users(Base):
     __tablename__ = 'users'
     userUID = Column('userMigrationUID', String(100), nullable=False,primary_key=True)
     username = Column('username', String(100), nullable=True)
-    ipAddress = Column('ipAddress', String(20), nullable=True)
-    connectionStartTime = Column('connectionStartTime', DateTime, nullable=True)
-    connectionStopTime = Column('connectionStopTime', DateTime, nullable=True)
+    ipAddressuserIP = Column('ipAddress', String(20), nullable=false)
+    serverIP = Column('serverIP', String(20), nullable=false)
+    connectionStartTime = Column('connectionStartTime', DateTime, nullable=false)
+    connectionStopTime = Column('connectionStopTime', DateTime, nullable=false)
 
 
 class Whitelist(Base):

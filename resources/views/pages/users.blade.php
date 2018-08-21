@@ -1,5 +1,21 @@
 <?php
 $users = $info['users'];
+$servers_used_on_months = array(["Jan",0],["Feb",0],["March",0],["Apr",0],["May",0],["Jun",0],[ "Jul",0],["Aug",0],["Sep",0],[ "Oct",0],["Nov",0],["Dec",0]);
+if(count($users) > 0){
+    for($i=0; $i<count($users);$i++){
+        $startMon = date("m",strtotime($users[$i]["connectionStartTime"]));
+        $endMon = date("m",strtotime($users[$i]["connectionStopTime"]));
+        if($startMon == $endMon  ){
+            $servers_used_on_months[$startMon-1][1] =  $servers_used_on_months[$startMon-1][1]+1;
+        }
+        else if($startMon < $endMon ){
+            for($j=$startMon -1; $j<$endMon ;$j++ )
+                {
+                    $servers_used_on_months[$j][1] =  $servers_used_on_months[$j][1]+1;
+                }
+        }
+    }
+}
 
 ?>
 
@@ -15,6 +31,26 @@ $users = $info['users'];
 
         <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
 
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {packages: ['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                // Define the chart to be drawn.
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Month');
+                data.addColumn('number', 'No of Servers(count)');
+                data.addRows(<?php echo(json_encode($servers_used_on_months)) ?>);
+                var options = {'title':'Number of Servers Used per Month by all the users in the year 2018',
+                    'orientation': 'horizontal',
+                    'width':'100%',
+                    'height':500};
+                // Instantiate and draw the chart.
+                var chart = new google.visualization.BarChart(document.getElementById('UsersBarChart'));
+                chart.draw(data, options);
+            }
+        </script>
         <style>
             .info-box-number{
                 font-size:32px;
@@ -54,7 +90,8 @@ $users = $info['users'];
                                     <tr>
                                         <th class='text-center'>User ID</th>
                                         <th class='text-center'>User Name</th>
-                                        <th class='text-center'>Source IP</th>
+                                        <th class='text-center'>User IP</th>
+                                        <th class='text-center'>Server IP</th>
                                         <th class='text-center'>Connection Start Time</th>
                                         <th class='text-center'>Connection Stop Time</th>
                                     </tr>
@@ -66,7 +103,8 @@ $users = $info['users'];
                                         for($i=0; $i<count($users);$i++){
                                             $userUID = $users[$i]["userUID"];
                                             $username = $users[$i]["username"];
-                                            $ipAddress = $users[$i]["ipAddress"];
+                                            $userIP = $users[$i]["userIP"];
+                                            $serverIP = $users[$i]["serverIP"];
                                             $connectionStartTime = $users[$i]["connectionStartTime"];
                                             $connectionStopTime = $users[$i]["connectionStopTime"];
 
@@ -74,7 +112,8 @@ $users = $info['users'];
                                             echo "<tr>";
                                             echo "<td>".$userUID."</td>";
                                             echo "<td>".$username."</td>";
-                                            echo "<td>".$ipAddress."</td>";
+                                            echo "<td>".$userIP."</td>";
+                                            echo "<td>".$serverIP."</td>";
                                             echo "<td>".$connectionStartTime."</td>";
                                             echo "<td>".$connectionStopTime."</td>";
                                             echo "</tr>";
@@ -95,7 +134,7 @@ $users = $info['users'];
                         <div class="box-header with-border">
                             <i class="fa fa-bar-chart-o"></i>
 
-                            <h3 class="box-title">Number of Servers Used per Month</h3>
+                            <h3 class="box-title">Number of Servers Used per Month By All Users</h3>
 
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -104,7 +143,7 @@ $users = $info['users'];
                             </div>
                         </div>
                         <div class="box-body">
-                            <div id="bar-chart" style="height: 300px;"></div>
+                            <div id="UsersBarChart" height="500px"/>
                         </div>
                         <!-- /.box-body-->
                     </div>

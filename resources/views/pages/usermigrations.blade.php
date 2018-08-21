@@ -1,6 +1,21 @@
 <?php
 $userMigrations = $info['usermigrations'];
-
+$servers_migrated = array(["Jan",0],["Feb",0],["March",0],["Apr",0],["May",0],["Jun",0],[ "Jul",0],["Aug",0],["Sep",0],[ "Oct",0],["Nov",0],["Dec",0]);
+if(count($userMigrations) > 0){
+    for($i=0; $i<count($userMigrations);$i++){
+        $startMon = date("m",strtotime($userMigrations[$i]["migrationStartTime"]));
+        $endMon = date("m",strtotime($userMigrations[$i]["migrationStopTime"]));
+        if($startMon == $endMon  ){
+            $servers_migrated[$startMon-1][1] =  $servers_migrated[$startMon-1][1]+1;
+        }
+        else if($startMon < $endMon ){
+            for($j=$startMon -1; $j<$endMon ;$j++ )
+            {
+                $servers_migrated[$j][1] =  $servers_migrated[$j][1]+1;
+            }
+        }
+    }
+}
 ?>
 
 
@@ -14,7 +29,27 @@ $userMigrations = $info['usermigrations'];
         <title>MTD | Users</title>
 
         <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
+        <script type="text/javascript">
+            google.charts.load('current', {packages: ['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                // Define the chart to be drawn.
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Month');
+                data.addColumn('number', 'No of User Migrations(count)');
+                data.addRows(<?php echo(json_encode($servers_migrated)) ?>);
+                var options = {'title':'Number of User Migrated per Month',
+                    'orientation': 'horizontal',
+                    'width':'100%',
+                    'height':500};
+                // Instantiate and draw the chart.
+                var chart = new google.visualization.LineChart(document.getElementById('UserMigrationsLineChart'));
+                chart.draw(data, options);
+            }
+        </script>
         <style>
             .info-box-number{
                 font-size:32px;
@@ -54,7 +89,7 @@ $userMigrations = $info['usermigrations'];
                                         <th class='text-center'>Orginal Server IP</th>
                                         <th class='text-center'>Migrated Server IP</th>
                                         <th class='text-center'>Migration Start Time</th>
-                                        <th class='text-center'>Migration Start Time</th>
+                                        <th class='text-center'>Migration Stop Time</th>
                                     </tr>
                                     </thead>
                                     <tbody id="tableBody" class="text-center">
@@ -105,7 +140,7 @@ $userMigrations = $info['usermigrations'];
                             </div>
                         </div>
                         <div class="box-body">
-                            <div id="bar-chart" style="height: 300px;"></div>
+                            <div id="UserMigrationsLineChart" height="500px"/>
                         </div>
                         <!-- /.box-body-->
                     </div>
