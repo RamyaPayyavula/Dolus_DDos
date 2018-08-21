@@ -7,30 +7,30 @@ $servers = $info['servers'];
 @extends('layouts.master')
 
 @section('content')
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>MTD | Servers</title>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>MTD | Servers</title>
 
-<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
 
-    <style>
-        .info-box-number{
-            font-size:32px;
-        }
-        span.label{
-            font-size:12px;
-        }
-    </style>
+        <style>
+            .info-box-number{
+                font-size:32px;
+            }
+            span.label{
+                font-size:12px;
+            }
+        </style>
 
 
-</head>
-<body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
-    <!-- NAVBAR -->
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        <!-- NAVBAR -->
 
-<!-- Content Wrapper. Contains page content -->
+        <!-- Content Wrapper. Contains page content -->
         <!-- Main content -->
         <section class="content">
             <!-- CURRENT SERVERS -->
@@ -65,7 +65,7 @@ $servers = $info['servers'];
                                     // Append Body
                                     if(count($servers) > 0){
 //                                        $bidVal = floatval(file_get_contents("/resources/assets/databid_value.txt"));
-                                          $bidVal=0.35;
+                                        $bidVal=0.35;
 
                                         for($i=0; $i<count($servers);$i++){
                                             $serverUID = $servers[$i]["serverUID"];
@@ -148,18 +148,18 @@ $servers = $info['servers'];
     </div>
     <!-- /.content-wrapper -->
 
-{{--<!-- ./wrapper -->--}}
+    {{--<!-- ./wrapper -->--}}
 
-<?php //include_once("../includes/js.php"); ?>
-
-
-
-<!-- DATATABLES -->
-<link href="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"/>
-<link href="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap4.min.js">
+    <?php //include_once("../includes/js.php"); ?>
 
 
-{{--</script>--}}
-</body>
-</html>
+
+    <!-- DATATABLES -->
+    <link href="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"/>
+    <link href="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap4.min.js">
+
+
+    {{--</script>--}}
+    </body>
+    </html>
 @endsection
