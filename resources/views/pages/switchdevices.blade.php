@@ -2,7 +2,14 @@
 $switches = $info['switches'];
 $devices = $info['devices'];
 $switchdevices = $info['switchdevices'];
+$switch_to_device = array();
+if(count($switchdevices)>0){
+    for($i=0;$i<count($switchdevices);$i++){
+        $switch_to_device[$i][0]=$switchdevices[$i]["switchID"];
+        $switch_to_device[$i][1]=$switchdevices[$i]["deviceID"];
 
+    }
+}
 ?>
 
 
@@ -16,7 +23,28 @@ $switchdevices = $info['switchdevices'];
         <title>MTD | Users</title>
 
         <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {packages: ['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
 
+            function drawChart() {
+                // Define the chart to be drawn.
+                var data = new google.visualization.DataTable();
+                data.addColumn('number', 'switchID');
+                data.addColumn('number', 'deviceID');
+                data.addRows(<?php echo(json_encode($switch_to_device)) ?>);
+                var options = {'title':'Devices and Switches association',
+                    'orientation': 'horizontal',
+                    hAxis: {title: 'switchID', minValue: 0},
+                    vAxis: {title: 'deviceID', minValue: 0},
+                    'width':'100%',
+                    'height':500};
+                // Instantiate and draw the chart.
+                var chart = new google.visualization.ScatterChart(document.getElementById('SwitchDevicesScatterPlot'));
+                chart.draw(data, options);
+            }
+        </script>
         <style>
             .info-box-number{
                 font-size:32px;
@@ -41,9 +69,8 @@ $switchdevices = $info['switchdevices'];
                         <div class="box-header with-border">
                             <h3 class="box-title">Current Switches</h3>
                             <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
                                 </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                             </div>
                         </div>
                         <div class="box-body">
@@ -82,7 +109,6 @@ $switchdevices = $info['switchdevices'];
                 </div>
             </div>
             <!-- /.row -->
-
             <!-- CURRENT DEVICES -->
             <div class="row">
                 <div class="col-md-12">
@@ -90,9 +116,8 @@ $switchdevices = $info['switchdevices'];
                         <div class="box-header with-border">
                             <h3 class="box-title">Current Devices</h3>
                             <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
                                 </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                             </div>
                         </div>
                         <div class="box-body">
@@ -136,7 +161,6 @@ $switchdevices = $info['switchdevices'];
                 </div>
             </div>
             <!-- /.row -->
-
             <!-- CURRENT SWITCH-DEVICE RELATIONSHIPS -->
             <div class="row">
                 <div class="col-md-12">
@@ -144,9 +168,8 @@ $switchdevices = $info['switchdevices'];
                         <div class="box-header with-border">
                             <h3 class="box-title">Current Switch-to-Device Association</h3>
                             <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
                                 </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                             </div>
                         </div>
                         <div class="box-body">
@@ -155,9 +178,7 @@ $switchdevices = $info['switchdevices'];
                                     <thead>
                                     <tr>
                                         <th class='text-center'>Switch ID</th>
-                                        <th class='text-center'>Switch Name</th>
                                         <th class='text-center'>Port</th>
-                                        <th class='text-center'>Device Name</th>
                                         <th class='text-center'>Device ID</th>
                                     </tr>
                                     </thead>
@@ -168,15 +189,11 @@ $switchdevices = $info['switchdevices'];
                                             $switchID = $switchdevices[$i]["switchID"];
                                             $deviceID = $switchdevices[$i]["deviceID"];
                                             $port = $switchdevices[$i]["port"];
-                                            $switch_name = $switchdevices[$i]["switch_name"];
-                                            $device_name = $switchdevices[$i]["device_name"];
 
                                             // Create Table Row
                                             echo "<tr>";
                                             echo "<td>".$switchID."</td>";
-                                            echo "<td>".$switch_name."</td>";
                                             echo "<td>".$port."</td>";
-                                            echo "<td>".$device_name."</td>";
                                             echo "<td>".$deviceID."</td>";
                                             echo "</tr>";
                                         }
@@ -190,6 +207,26 @@ $switchdevices = $info['switchdevices'];
                 </div>
             </div>
             <!-- /.row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-bar-chart-o"></i>
+
+                            <h3 class="box-title">Number of Devices connected to Switch</h3>
+
+                            <div class="box-tools pull-right">
+                                <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div id="SwitchDevicesScatterPlot" height="500px"/>
+                        </div>
+                        <!-- /.box-body-->
+                    </div>
+                </div>
+            </div>
             <!-- END OF CHART -->
         </section>
         <!-- /.content -->

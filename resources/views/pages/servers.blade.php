@@ -30,7 +30,7 @@ if(count($servers) > 0){
                 // Define the chart to be drawn.
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'Month');
-                data.addColumn('number', 'Count');
+                data.addColumn('number', 'No of Servers');
                 data.addRows(<?php echo(json_encode($servers_on_months)) ?>);
                 var options = {'title':'Number of Servers Live per Month in the year 2018',
                     'orientation': 'horizontal',
@@ -67,11 +67,8 @@ if(count($servers) > 0){
                         <div class="box-header with-border">
                             <h3 class="box-title">Current Servers</h3>
                             <div class="box-tools pull-right">
-                                <button type="button" onclick="refreshServerStatus()" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
+                                <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
                                 </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                             </div>
                         </div>
                         <div class="box-body">
@@ -150,11 +147,9 @@ if(count($servers) > 0){
                             <i class="fa fa-bar-chart-o"></i>
 
                             <h3 class="box-title">Number of Servers Live per Month</h3>
-
                             <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
                                 </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                             </div>
                         </div>
                         <div class="box-body">

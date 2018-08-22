@@ -81,7 +81,9 @@ $users = $info['users'];
                                 <i class="fa fa-line-chart"></i>
 
                                 <h3 class="box-title">Bandwidth Utilization</h3>
-
+                                <div class="box-tools pull-right">
+                                    <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
+                                    </button>
                                 <!-- <div class="box-tools pull-right">
                                   Real time
                                   <div class="btn-group" id="realtime" data-toggle="btn-toggle">
@@ -110,6 +112,10 @@ $users = $info['users'];
                                 <i class="fa fa-line-chart"></i>
 
                                 <h3 class="box-title">Root Switch</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
+                                    </button>
+                                </div>
 
                                 <!-- <div class="box-tools pull-right">
                                   Real time
@@ -135,6 +141,10 @@ $users = $info['users'];
                                 <i class="fa fa-line-chart"></i>
 
                                 <h3 class="box-title">Slave Switch</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
+                                    </button>
+                                </div>
 
                                 <!-- <div class="box-tools pull-right">
                                   Real time
@@ -147,6 +157,7 @@ $users = $info['users'];
                             <div class="box-body">
                                 <div id="switch1" style="height: 300px;"></div><!--interactive-->
                             </div>
+                        </div>
                             <!-- /.box-body-->
                         </div>
                         <!-- /.box -->

@@ -74,13 +74,10 @@ if(count($users) > 0){
                 <div class="col-md-12">
                     <div class="box box-default">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Current Servers</h3>
+                            <h3 class="box-title">Current Users</h3>
                             <div class="box-tools pull-right">
-                                <button type="button" onclick="refreshServerStatus()" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
+                                <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
                                 </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                             </div>
                         </div>
                         <div class="box-body">
@@ -137,9 +134,8 @@ if(count($users) > 0){
                             <h3 class="box-title">Number of Servers Used per Month By All Users</h3>
 
                             <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
                                 </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                             </div>
                         </div>
                         <div class="box-body">
