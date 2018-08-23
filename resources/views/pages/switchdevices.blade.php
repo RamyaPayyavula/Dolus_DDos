@@ -136,7 +136,7 @@ if(count($switchdevices)>0){
                                     <?php
                                    if(count($devices) > 0){
                                         for($i=0; $i<count($devices);$i++){
-                                            $deviceID = $devices[$i]["deviceID"];
+                                            $deviceID = $devices[$i]["device_id"];
                                             $deviceName = $devices[$i]["name"];
                                             $ipv4 = $devices[$i]["ipv4"];
                                             $ipv6 = $devices[$i]["ipv6"];

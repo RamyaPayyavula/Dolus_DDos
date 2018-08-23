@@ -64,7 +64,7 @@ $devices = $info['devices'];
                                         // Append Body
                                         if(count($devices) > 0){
                                             for($i=0; $i<count($devices);$i++){
-                                                $deviceID = $devices[$i]["deviceID"];
+                                                $deviceID = $devices[$i]["device_id"];
                                                 $deviceName = $devices[$i]["name"];
                                                 if(strcasecmp($deviceName, "user1")==0){
                                                     echo "<option device-id='".$deviceID."' value='".$deviceName."' selected>".$deviceName."</option>";
@@ -129,7 +129,7 @@ $devices = $info['devices'];
                                         // Append Body
                                         if(count($devices) > 0){
                                             for($i=0; $i<count($devices);$i++){
-                                                $deviceID = $devices[$i]["deviceID"];
+                                                $deviceID = $devices[$i]["device_id"];
                                                 $deviceName = $devices[$i]["name"];
                                                 if(strcasecmp($deviceName, "user1")==0){
                                                     echo "<option device-id='".$deviceID."' value='".$deviceName."' selected>".$deviceName."</option>";
@@ -173,7 +173,7 @@ $devices = $info['devices'];
                                         // Append Body
                                         if(count($devices) > 0){
                                             for($i=0; $i<count($devices);$i++){
-                                                $deviceID = $devices[$i]["deviceID"];
+                                                $deviceID = $devices[$i]["device_id"];
                                                 $deviceName = $devices[$i]["name"];
                                                 if(strcasecmp($deviceName, "user1")==0){
                                                     echo "<option device-id='".$deviceID."' value='".$deviceName."' selected>".$deviceName."</option>";
@@ -217,7 +217,7 @@ $devices = $info['devices'];
                                         // Append Body
                                         if(count($devices) > 0){
                                             for($i=0; $i<count($devices);$i++){
-                                                $deviceID = $devices[$i]["deviceID"];
+                                                $deviceID = $devices[$i]["device_id"];
                                                 $deviceName = $devices[$i]["name"];
                                                 if(strcasecmp($deviceName, "user1")==0){
                                                     echo "<option device-id='".$deviceID."' value='".$deviceName."' selected>".$deviceName."</option>";

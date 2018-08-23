@@ -1,26 +1,10 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, Numeric, DateTime
-from python.settings import Session, engine, Base
-#
-#
-# class Product(Base):
-#     __tablename__ = 'products'
-#     id = Column(Integer, primary_key=True)
-#     title = Column('title', String(32))
-#     in_stock = Column('in_stock', Boolean)
-#     quantity = Column('quantity', Integer)
-#     price = Column('price', Numeric)
-#
-#
-# class Person(Base):
-#     __tablename__ = 'person'
-#     id = Column(Integer, primary_key=True)
-#     title = Column('title', String(32))
-#     in_stock = Column('in_stock', Boolean)
-#     quantity = Column('quantity', Integer)
-#     price = Column('price', Numeric)
-
+from settings import Session, engine, Base
+import datetime
+import time
 # buildDB.sql scripts automated in sql alchemy
-
+timestamp = time.time()
+current_date_timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
 # attackhistory table
 
 class Attackhistory(Base):
@@ -28,7 +12,7 @@ class Attackhistory(Base):
     attacker_id = Column('attacker_id',String(100),primary_key=True)
     source_IP = Column('source_IP', String(20), nullable=True)
     destination_IP = Column('destination_IP', String(20), nullable=True)
-    attackStartTime = Column(DateTime, nullable= True)
+    attackStartTime = Column(DateTime, nullable=True)
     attackStopTime = Column(DateTime, nullable=True)
     numberOfPackets = Column('numberOfPackets', Integer, nullable=True)
 
@@ -48,7 +32,7 @@ class DevicesType(Base):
 
 class Devices(Base):
     __tablename__ = 'devices'
-    deviceID = Column('deviceID', Integer, primary_key=True)
+    deviceID = Column('device_id', Integer, primary_key=True)
     name = Column('name', String(45), nullable=False, unique=True)
     type = Column('type', Integer, nullable=False, default=0)
     ipv4 = Column('ipv4',String(15), nullable=True)
@@ -59,8 +43,8 @@ class Devices(Base):
 class Login(Base):
     __tablename__ = 'login'
     adminUID = Column('adminUID', String(255), primary_key=True, nullable=False)
-    username = Column('username', String(255), nullable=True)
-    passwd = Column('passwd', String(255), nullable=True)
+    username = Column('username', String(255), nullable=False)
+    passwd = Column('passwd', String(255), nullable=False)
     salt = Column('salt', String(255), nullable=True)
 
 class Logs(Base):
@@ -155,14 +139,19 @@ class SimplePolicies(Base):
 
 class SuspiciousnessScores(Base):
     __tablename__ = 'suspiciousness_scores'
-    name = Column('name', String(45), nullable=False)
+    deviceID = Column('device_id', Integer, primary_key=True)
     traceID = Column('traceID', Integer, primary_key=True)
-    score = Column('score', Numeric, primary_key=True)
+    ssscore_caluculated_time = Column('ssscore_caluculated_time', DateTime, primary_key=True)
+    score = Column('score', Numeric, nullable=True)
+
 
 class SuspiciousnessScoresByTime(Base):
     __tablename__ = 'suspiciousness_scores_by_time'
+    deviceID = Column('device_id', Integer, primary_key=True)
+    traceID = Column('traceID', Integer, primary_key=True)
     frame_time = Column('frame_time', Integer, primary_key=True)
-    score = Column('score', Numeric, default=0)
+    score = Column('score', Numeric, nullable=True)
+    suspiciousness_caluculated_time = Column('suspiciousness_caluculated_time', DateTime, primary_key=True)
 
 
 class SwitchDevices(Base):
@@ -176,7 +165,7 @@ class Switches(Base):
     __tablename__ = 'switches'
     switchID = Column('switchID', Integer, nullable=False,primary_key=True)
     name = Column('name', String(45), nullable=False, unique=True)
-    totalPorts = Column('traceID', Integer, nullable=False, default=0)
+    totalPorts = Column('totalPorts', Integer, nullable=False, default=0)
     score = Column('score', Numeric, primary_key=True)
 
 
@@ -194,10 +183,10 @@ class Users(Base):
     __tablename__ = 'users'
     userUID = Column('userMigrationUID', String(100), nullable=False,primary_key=True)
     username = Column('username', String(100), nullable=True)
-    ipAddressuserIP = Column('ipAddress', String(20), nullable=false)
-    serverIP = Column('serverIP', String(20), nullable=false)
-    connectionStartTime = Column('connectionStartTime', DateTime, nullable=false)
-    connectionStopTime = Column('connectionStopTime', DateTime, nullable=false)
+    ipAddressuserIP = Column('ipAddress', String(20), nullable=False)
+    serverIP = Column('serverIP', String(20), nullable=False)
+    connectionStartTime = Column('connectionStartTime', DateTime, nullable=False)
+    connectionStopTime = Column('connectionStopTime', DateTime, nullable=False)
 
 
 class Whitelist(Base):

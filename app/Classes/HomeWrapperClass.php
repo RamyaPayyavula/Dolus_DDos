@@ -143,11 +143,11 @@ class HomeWrapperClass
     }
 
     // get SS by user/device
-    public function getSuspiciousnessScoreByDevice($name){
+    public function getSuspiciousnessScoreByDevice($device_id){
 
         $table = "suspiciousness_scores";
 
-        $data = DB::connection('mysql')->table($table)->where('name', $name)->get();
+        $data = DB::connection('mysql')->table($table)->where('device_id', $device_id)->get();
         $_arr = $this->convertStdclassArrayToArray($data);
 
         return $_arr;
