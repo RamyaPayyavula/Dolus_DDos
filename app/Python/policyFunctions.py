@@ -1,7 +1,7 @@
 from datetime import datetime
 from pytz import timezone
-from python.settings import session
-from python.models import Policies
+from app.Python.settings import session
+from app.Python.models import Policies
 
 def getExistingPolicy():
     existingPolicies = ''

@@ -32,7 +32,7 @@ class DevicesType(Base):
 
 class Devices(Base):
     __tablename__ = 'devices'
-    deviceID = Column('device_id', Integer, primary_key=True)
+    deviceID = Column('deviceID', Integer, primary_key=True)
     name = Column('name', String(45), nullable=False, unique=True)
     type = Column('type', Integer, nullable=False, default=0)
     ipv4 = Column('ipv4',String(15), nullable=True)

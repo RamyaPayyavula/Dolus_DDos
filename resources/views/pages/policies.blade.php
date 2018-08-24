@@ -46,6 +46,7 @@ $policies = $info['policies'];
                                 <div class="col-md-6 text-right">
                                     <button class="btn btn-primary" onclick="addNewPolicy()">Add New Policy</button>
                                 </div>
+                                <p id="addingPolicy"></p>
                             </div>
                         </div>
                         <!-- /.box-header -->
@@ -171,8 +172,18 @@ $policies = $info['policies'];
 </div>
 <!-- ./wrapper -->
 
-
-
+<script>
+    function addNewPolicy() {
+        var div = document.createElement("div");
+        div.style.marginTop ="20px";
+        div.style.marginRight = "100px";
+        div.style.marginLeft = "100px";
+        div.style.marginBottom = "20px";
+        div.style.height = "100px";
+        div.innerHTML = "<textarea name=\"message\" rows=\"5\" cols=\"100\"></textarea><input type=\"submit\">";
+        document.getElementById("addingPolicy").appendChild(div);
+    }
+</script>
 </body>
 </html>
 @endsection

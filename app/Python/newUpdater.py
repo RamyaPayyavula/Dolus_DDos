@@ -3,7 +3,6 @@
 import requests, json
 from frenetic.syntax import *
 import urllib2
-from settings import session
 
 nodes = {   "server1" : "10.0.0.1",
             "server2" : "10.0.0.2",
