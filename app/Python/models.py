@@ -42,10 +42,11 @@ class Devices(Base):
 
 class Login(Base):
     __tablename__ = 'login'
-    adminUID = Column('adminUID', String(255), primary_key=True, nullable=False)
-    username = Column('username', String(255), nullable=False)
-    passwd = Column('passwd', String(255), nullable=False)
-    salt = Column('salt', String(255), nullable=True)
+    username = Column('username', String(255), primary_key=True, nullable=False)
+    password = Column('password', String(255), nullable=False)
+    remember_token = Column('remember_token', Integer, nullable=True)
+    created_at = Column('created_at', DateTime, nullable=True)
+    updated_at = Column('updated_at', DateTime, nullable=True)
 
 class Logs(Base):
     __tablename__ = 'logs'
