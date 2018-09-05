@@ -80,7 +80,7 @@ public function getServerDetails(Request $request)
         $info=array('blacklistIps'=>$blacklistIps
         );
 
-        return view('pages/blacklistIps')->with('info', $info);
+        return view('pages/blacklistips')->with('info', $info);
     }
     public function getSwitchAndDevices(Request $request)
     {
