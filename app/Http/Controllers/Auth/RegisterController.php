@@ -59,8 +59,7 @@ class RegisterController extends Controller
         $user->remember_token=1;
         $user->save();
 
-        $view="\auth\login";
-        return view($view);
+        return redirect('login')->with('message','Login here');
 
     }
     protected function validator(array $data)
