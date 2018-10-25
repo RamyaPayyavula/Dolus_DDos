@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 import sys
-from app.Python.settings import Session, engine, Base
-from app.Python.calcSSByTime import calculateSSByTime
-from app.Python.calcSS import calculateSS
-from app.Python.models import SuspiciousnessScores
+from settings import Session, engine, Base
+from calcSSByTime import calculateSSByTime
+from calcSS import calculateSS
+from models import SuspiciousnessScores
 
 
 session = Session()
