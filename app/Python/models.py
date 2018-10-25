@@ -24,12 +24,6 @@ class Blacklist(Base):
     blacklistedOn = Column('blacklistedOn',DateTime, nullable=True)
 
 
-class DevicesType(Base):
-    __tablename__ = 'deviceType'
-    type = Column('type', Integer, primary_key=True)
-    name = Column('name', String(45), default="DefaultType")
-
-
 class Devices(Base):
     __tablename__ = 'devices'
     deviceID = Column('deviceID', Integer, primary_key=True)
@@ -107,12 +101,6 @@ class Qvm(Base):
     currentlyActive = Column('currentlyActive', Integer, default=None)
 
 
-class Rules(Base):
-    __tablename__ = 'rules'
-    rule = Column('rule', String(40), nullable=False, primary_key=True)
-    loaded = Column('loaded', Integer, default=0)
-
-
 class Servers(Base):
     __tablename__ = 'servers'
     serverUID = Column('serverUID', String(100), primary_key=True)
@@ -121,14 +109,6 @@ class Servers(Base):
     serverCreatedOn = Column('serverCreatedOn', DateTime, default=None)
     reputationValue = Column('reputationValue', Numeric, default=None)
     bidValue = Column('bidValue', Numeric, default=None)
-
-
-class SimplePolicies(Base):
-    __tablename__ = 'simple_policies'
-    policyID = Column('policyID', String(36), primary_key=True)
-    deviceSrcID = Column('deviceSrcID', Integer, default=None)
-    deviceDstID = Column('deviceDstID', Integer, default=None)
-    loaded = Column('loaded', Integer, default=None)
 
 
 class SuspiciousnessScores(Base):
@@ -150,14 +130,14 @@ class SuspiciousnessScoresByTime(Base):
 
 class SwitchDevices(Base):
     __tablename__ = 'switch_devices'
-    switchID = Column('switchID', Integer, ForeignKey("switches.switchID"), nullable=False)
-    deviceID = Column('deviceID', ForeignKey("devices.deviceID"), nullable=False)
+    switchID = Column('switchID', BigInteger, nullable=False)
+    deviceID = Column('deviceID', Integer, nullable=False)
     port = Column('port', Integer, primary_key=True)
 
 
 class Switches(Base):
     __tablename__ = 'switches'
-    switchID = Column('switchID', Integer, nullable=False,primary_key=True)
+    switchID = Column('switchID', Integer, nullable=False, primary_key=True)
     name = Column('name', String(45), nullable=False, unique=True)
     totalPorts = Column('totalPorts', Integer, default=0)
     score = Column('score', Numeric, primary_key=True)
@@ -192,3 +172,67 @@ class Whitelist(Base):
 session = Session()
 Base.metadata.create_all(engine)
 session.commit()
+
+# inserting data here
+
+# inserting in Devices tables
+objects = [
+    Devices(deviceID="1", name='user1', type='user', ipv4='10.0.0.107', ipv6='10.0.0.107', mac='0283ea6e1fe0'),
+    Devices(deviceID="2", name='user2', type='user', ipv4='10.0.0.109', ipv6='10.0.0.109', mac='0245dbc7d81f'),
+    Devices(deviceID="3", name='attacker1', type='user', ipv4='10.0.0.108', ipv6='10.0.0.108', mac='024089e25896'),
+    Devices(deviceID="4", name='attacker2', type='user', ipv4='10.0.0.110', ipv6='10.0.0.110', mac='0243b69c46be'),
+    Devices(deviceID="5", name='attacker3', type='user', ipv4='10.0.0.106', ipv6='10.0.0.106', mac='026c160681b5'),
+    Devices(deviceID="6", name='qvm', type='qvm', ipv4='10.0.0.105', ipv6='10.0.0.105', mac='02744a0ec85d')
+]
+session.bulk_save_objects(objects)
+session.commit()
+
+# inserting into Qvm
+
+objects = [
+    Qvm(qvmUID="1", qvmName='Qvm', qvmIP='10.0.0.105')
+
+]
+session.bulk_save_objects(objects)
+session.commit()
+
+# inserting server
+
+objects = [
+    Servers(serverUID="11", serverName='server1', serverIP='10.0.0.102', serverCreatedOn=current_date_timestamp, reputationValue='10', bidValue='5'),
+    Servers(serverUID="12", serverName='server2', serverIP='10.0.0.103', serverCreatedOn=current_date_timestamp, reputationValue='8', bidValue='4'),
+    Servers(serverUID="13", serverName='server3', serverIP='10.0.0.104', serverCreatedOn=current_date_timestamp, reputationValue='7', bidValue='6')
+  ]
+session.bulk_save_objects(objects)
+session.commit()
+
+# inserting into SwitchDevices
+objects = [
+    SwitchDevices(switchID="129860609480772", deviceID='11', port='2'),
+    SwitchDevices(switchID="129860609480772", deviceID='12', port='3'),
+    SwitchDevices(switchID="129860609480772", deviceID='13', port='4'),
+
+    SwitchDevices(switchID="178505423650629", deviceID='1', port='7'),
+    SwitchDevices(switchID="178505423650629", deviceID='2', port='4'),
+    SwitchDevices(switchID="178505423650629", deviceID='3', port='3'),
+    SwitchDevices(switchID="178505423650629", deviceID='4', port='2'),
+    SwitchDevices(switchID="178505423650629", deviceID='5', port='6'),
+    SwitchDevices(switchID="178505423650629", deviceID='6', port='5'),
+
+  ]
+session.bulk_save_objects(objects)
+session.commit()
+
+# inserting Switches
+
+objects = [
+    Switches(switchID="129860609480772", name='root-switch', totalPorts='4', score='4'),
+    Switches(switchID="178505423650629", name='slave-switch', totalPorts='7', score='7')
+  ]
+session.bulk_save_objects(objects)
+session.commit()
+
+
+# ad_rule = Rules(rule="Rule 3",loaded=3)
+# session.add(ad_rule)
+#session.execute("Alter table products add rating Integer;")
