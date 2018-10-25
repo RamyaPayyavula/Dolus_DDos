@@ -42,28 +42,6 @@ class Login(Base):
     created_at = Column('created_at', DateTime, nullable=True)
     updated_at = Column('updated_at', DateTime, nullable=True)
 
-class Logs(Base):
-    __tablename__ = 'logs'
-    switch_id = Column('switch_id', Integer, primary_key=True, nullable=False)
-    port_id = Column('port_id', Integer, primary_key=True, nullable=False)
-    timestamp = Column(DateTime, primary_key=True, nullable=False)
-    rx_packets = Column('rx_packets', Integer, default=0)
-    delta_rx_packets = Column('delta_rx_packets', Integer, default=0)
-    tx_packets = Column('tx_packets', Integer, default=0)
-    delta_tx_packets = Column('delta_tx_packets', Integer, default=0)
-    rx_bytes = Column('rx_bytes', Integer, default=0)
-    delta_rx_bytes = Column('delta_rx_bytes', Integer, default=0)
-    tx_bytes = Column('tx_bytes', Integer, default=0)
-    delta_tx_bytes = Column('delta_tx_bytes', Integer, default=0)
-    rx_dropped = Column('rx_dropped', Integer, default=0)
-    tx_dropped = Column('tx_dropped', Integer, default=0)
-    rx_errors = Column('rx_errors', Integer, default=0)
-    tx_errors = Column('tx_errors', Integer, default=0)
-    rx_fram_err = Column('rx_fram_err', Integer, default=0)
-    rx_over_err = Column('rx_over_err', Integer, default=0)
-    rx_crc_err = Column('rx_crc_err', Integer, default=0)
-    collisions = Column('collisions', Integer, default=0)
-
 
 class PacketLogs(Base):
     __tablename__ = 'packet_logs'
