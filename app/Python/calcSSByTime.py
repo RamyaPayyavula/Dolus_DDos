@@ -1,7 +1,7 @@
 import sys
 from sqlalchemy import func
-from app.Python.settings import Session
-from app.Python.models import PacketLogs
+from settings import Session
+from models import PacketLogs
 import datetime
 import time
 
