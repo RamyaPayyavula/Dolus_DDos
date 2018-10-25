@@ -1,5 +1,5 @@
 import sys
-from app.Python.settings import Session, engine, Base
+from settings import Session, engine, Base
 import datetime
 import time
 timestamp = time.time()
