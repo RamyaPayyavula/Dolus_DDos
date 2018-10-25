@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, Numeric, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, Numeric, DateTime, BigInteger
 from settings import Session, engine, Base
 import datetime
 import time
@@ -9,7 +9,7 @@ current_date_timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y
 
 class Attackhistory(Base):
     __tablename__ = 'attackhistory'
-    attacker_id = Column('attacker_id',String(100),primary_key=True)
+    attacker_id = Column('attacker_id',String(100), primary_key=True)
     source_IP = Column('source_IP', String(20), nullable=True)
     destination_IP = Column('destination_IP', String(20), nullable=True)
     attackStartTime = Column(DateTime, nullable=True)
@@ -21,7 +21,7 @@ class Blacklist(Base):
     __tablename__ = 'blacklist'
     ipAddressuserIP = Column('ipAddress',String(20), primary_key=True)
     macAddress = Column('macAddress', String(20), nullable=True)
-    blacklistedOn = Column('blacklistedOn',DateTime, nullable= True)
+    blacklistedOn = Column('blacklistedOn',DateTime, nullable=True)
 
 
 class DevicesType(Base):
@@ -34,7 +34,7 @@ class Devices(Base):
     __tablename__ = 'devices'
     deviceID = Column('deviceID', Integer, primary_key=True)
     name = Column('name', String(45), nullable=False, unique=True)
-    type = Column('type', Integer, nullable=False, default=0)
+    type = Column('type', Integer, nullable=True)
     ipv4 = Column('ipv4',String(15), nullable=True)
     ipv6 = Column('ipv6', String(45), nullable=True)
     mac = Column('mac', String(45), nullable=True)
@@ -44,7 +44,7 @@ class Login(Base):
     __tablename__ = 'login'
     username = Column('username', String(255), primary_key=True, nullable=False)
     password = Column('password', String(255), nullable=False)
-    remember_token = Column('remember_token', String(10), nullable=True)
+    remember_token = Column('remember_token', Integer, nullable=True)
     created_at = Column('created_at', DateTime, nullable=True)
     updated_at = Column('updated_at', DateTime, nullable=True)
 
@@ -53,45 +53,40 @@ class Logs(Base):
     switch_id = Column('switch_id', Integer, primary_key=True, nullable=False)
     port_id = Column('port_id', Integer, primary_key=True, nullable=False)
     timestamp = Column(DateTime, primary_key=True, nullable=False)
-    rx_packets = Column('rx_packets', Integer, nullable=False, default=0)
+    rx_packets = Column('rx_packets', Integer, default=0)
     delta_rx_packets = Column('delta_rx_packets', Integer, default=0)
-    tx_packets = Column('tx_packets', Integer, nullable=False, default=0)
+    tx_packets = Column('tx_packets', Integer, default=0)
     delta_tx_packets = Column('delta_tx_packets', Integer, default=0)
-    rx_bytes = Column('rx_bytes', Integer, nullable=False, default=0)
+    rx_bytes = Column('rx_bytes', Integer, default=0)
     delta_rx_bytes = Column('delta_rx_bytes', Integer, default=0)
-    tx_bytes = Column('tx_bytes', Integer, nullable=False, default=0)
+    tx_bytes = Column('tx_bytes', Integer, default=0)
     delta_tx_bytes = Column('delta_tx_bytes', Integer, default=0)
-    rx_dropped = Column('rx_dropped', Integer, nullable=False, default=0)
-    tx_dropped = Column('tx_dropped', Integer, nullable=False, default=0)
-    rx_errors = Column('rx_errors', Integer, nullable=False, default=0)
-    tx_errors = Column('tx_errors', Integer, nullable=False, default=0)
-    rx_fram_err = Column('rx_fram_err', Integer, nullable=False, default=0)
-    rx_over_err = Column('rx_over_err', Integer, nullable=False, default=0)
-    rx_crc_err = Column('rx_crc_err', Integer, nullable=False, default=0)
-    collisions = Column('collisions', Integer, nullable=False)
+    rx_dropped = Column('rx_dropped', Integer, default=0)
+    tx_dropped = Column('tx_dropped', Integer, default=0)
+    rx_errors = Column('rx_errors', Integer, default=0)
+    tx_errors = Column('tx_errors', Integer, default=0)
+    rx_fram_err = Column('rx_fram_err', Integer, default=0)
+    rx_over_err = Column('rx_over_err', Integer, default=0)
+    rx_crc_err = Column('rx_crc_err', Integer, default=0)
+    collisions = Column('collisions', Integer, default=0)
 
 
 class PacketLogs(Base):
     __tablename__ = 'packet_logs'
-    switch_id = Column('switch_id', Integer, primary_key=True, nullable=False)
+    switch_id = Column('switch_id', BigInteger, primary_key=True, nullable=False)
     trace_id = Column('trace_id', Integer, primary_key=True, nullable=False)
     frame_number = Column('frame_number', Integer, primary_key=True, nullable=False)
-    frame_time = Column('frame_time', Integer, nullable=False)
-    frame_time_relative = Column('frame_time_relative', Numeric(10), nullable=False, default=0)
-    frame_protocols = Column('frame_protocols', String(20), nullable=False)
-    frame_len = Column('frame_len', Integer, nullable=False)
-    eth_src = Column('eth_src', String(17), nullable=True)
-    eth_dst = Column('eth_dst', String(17), nullable=True)
-    eth_type = Column('eth_type', String(10), nullable=True)
-    ip_proto = Column('ip_proto', Integer, nullable=False, default=0)
-    ip_src = Column('ip_src', String(15), nullable=True, index=True)
-    ip_dst = Column('ip_dst', String(15), nullable=True, index=True)
-    tcp_srcport = Column('tcp_srcport', Integer, nullable=False)
-    tcp_dstport = Column('tcp_dstport', Integer, nullable=False, default=0)
-    udp_srcport = Column('udp_srcport', Integer, nullable=False, default=0)
-    udp_dstport = Column('udp_dstport', Integer, nullable=False, default=0)
-    vlan = Column('vlan', String(45), nullable=True)
-    vlanPcp = Column('vlanPcp', String(45), nullable=True)
+    frame_time = Column('frame_time', Integer, default=None)
+    frame_time_relative = Column('frame_time_relative', Numeric(30), default=None)
+    frame_protocols = Column('frame_protocols', String(50), default=None)
+    frame_len = Column('frame_len', Integer, default=None)
+    eth_src = Column('eth_src', String(20), default=None)
+    eth_dst = Column('eth_dst', String(20), default=None)
+    eth_type = Column('eth_type', String(10), default=None)
+    ip_proto = Column('ip_proto', Integer, default=None)
+    ip_src = Column('ip_src', String(15), default=None)
+    ip_dst = Column('ip_dst', String(15), default=None)
+
 
 
 class Policies(Base):
@@ -99,19 +94,19 @@ class Policies(Base):
     policyID = Column('policyID', String(36), primary_key=True)
     deviceID = Column('deviceID', Integer, ForeignKey("devices.deviceID"), nullable=False)
     policy = Column('policy', String(40), nullable=False)
-    loaded = Column('loaded',Integer, nullable=False, default=0)
-    ipv6 = Column('ipv6', String(45), nullable=True)
-    mac = Column('mac', String(45), nullable=True)
+    loaded = Column('loaded',Integer, default=None)
+    ipv6 = Column('ipv6', String(45), default=None)
+    mac = Column('mac', String(45), default=None)
 
 
 class Qvm(Base):
     __tablename__ = 'qvm'
     qvmUID = Column('qvmUID', String(100), primary_key=True)
     qvmName = Column('qvmName', String(255), nullable=True)
-    qvmIP = Column('qvmIP', String(20), nullable=True)
-    qvmStartTime = Column('qvmStartTime',DateTime, nullable=True)
-    numberOfAttackers = Column('numberOfAttackers', Integer, nullable=True)
-    currentlyActive = Column('currentlyActive', Integer, nullable=True)
+    qvmIP = Column('qvmIP', String(20), default=None)
+    qvmStartTime = Column('qvmStartTime',DateTime, default=None)
+    numberOfAttackers = Column('numberOfAttackers', Integer, default=None)
+    currentlyActive = Column('currentlyActive', Integer, default=None)
 
 
 class Rules(Base):
@@ -123,19 +118,19 @@ class Rules(Base):
 class Servers(Base):
     __tablename__ = 'servers'
     serverUID = Column('serverUID', String(100), primary_key=True)
-    serverName = Column('serverName', String(1255), nullable=False)
-    serverIP = Column('serverIP', String(20), nullable=False)
-    serverCreatedOn = Column('serverCreatedOn',DateTime, nullable=True)
-    reputationValue = Column('reputationValue', Numeric, nullable=True)
-    bidValue = Column('bidValue', Numeric, nullable=True)
+    serverName = Column('serverName', String(1255), default=None)
+    serverIP = Column('serverIP', String(20), default=None)
+    serverCreatedOn = Column('serverCreatedOn', DateTime, default=None)
+    reputationValue = Column('reputationValue', Numeric, default=None)
+    bidValue = Column('bidValue', Numeric, default=None)
 
 
 class SimplePolicies(Base):
     __tablename__ = 'simple_policies'
     policyID = Column('policyID', String(36), primary_key=True)
-    deviceSrcID = Column('deviceSrcID', Integer, nullable=True)
-    deviceDstID = Column('deviceDstID', Integer, nullable=True)
-    loaded = Column('loaded',Integer, nullable=True)
+    deviceSrcID = Column('deviceSrcID', Integer, default=None)
+    deviceDstID = Column('deviceDstID', Integer, default=None)
+    loaded = Column('loaded', Integer, default=None)
 
 
 class SuspiciousnessScores(Base):
@@ -143,7 +138,7 @@ class SuspiciousnessScores(Base):
     deviceID = Column('device_id', Integer, primary_key=True)
     traceID = Column('traceID', Integer, primary_key=True)
     ssscore_caluculated_time = Column('ssscore_caluculated_time', DateTime, primary_key=True)
-    score = Column('score', Numeric, nullable=True)
+    score = Column('score', Numeric, default=0)
 
 
 class SuspiciousnessScoresByTime(Base):
@@ -151,7 +146,7 @@ class SuspiciousnessScoresByTime(Base):
     deviceID = Column('device_id', Integer, primary_key=True)
     traceID = Column('traceID', Integer, primary_key=True)
     frame_time = Column('frame_time', Integer, primary_key=True)
-    score = Column('score', Numeric, nullable=True)
+    score = Column('score', Numeric, default=0)
     suspiciousness_caluculated_time = Column('suspiciousness_caluculated_time', DateTime, primary_key=True)
 
 
@@ -166,39 +161,232 @@ class Switches(Base):
     __tablename__ = 'switches'
     switchID = Column('switchID', Integer, nullable=False,primary_key=True)
     name = Column('name', String(45), nullable=False, unique=True)
-    totalPorts = Column('totalPorts', Integer, nullable=False, default=0)
+    totalPorts = Column('totalPorts', Integer, default=0)
     score = Column('score', Numeric, primary_key=True)
 
 
 class UserMigration(Base):
     __tablename__ = 'usermigration'
-    userMigrationUID = Column('userMigrationUID', String(100), nullable=False,primary_key=True)
+    userMigrationUID = Column('userMigrationUID', String(100), nullable=False, primary_key=True)
     userIP = Column('userIP', String(45), nullable=True)
-    originalServerIP = Column('originalServerIP', String(45), nullable=True)
-    migratedServerIP = Column('migratedServerIP', String(45), nullable=True)
-    migrationStartTime = Column('migrationStartTime', DateTime, nullable=True)
-    migrationStopTime = Column('migrationStopTime', DateTime, nullable=True)
+    originalServerIP = Column('originalServerIP', String(45), default=None)
+    migratedServerIP = Column('migratedServerIP', String(45), default=None)
+    migrationStartTime = Column('migrationStartTime', DateTime, default=None)
+    migrationStopTime = Column('migrationStopTime', DateTime, default=None)
 
 
 class Users(Base):
     __tablename__ = 'users'
-    userUID = Column('userMigrationUID', String(100), nullable=False,primary_key=True)
-    username = Column('username', String(100), nullable=True)
-    ipAddressuserIP = Column('ipAddress', String(20), nullable=False)
-    serverIP = Column('serverIP', String(20), nullable=False)
-    connectionStartTime = Column('connectionStartTime', DateTime, nullable=False)
-    connectionStopTime = Column('connectionStopTime', DateTime, nullable=False)
+    userUID = Column('userMigrationUID', String(100), nullable=False, primary_key=True)
+    username = Column('username', String(100), default=None)
+    ipAddressuserIP = Column('ipAddress', String(20), default=None)
+    serverIP = Column('serverIP', String(20), default=None)
+    connectionStartTime = Column('connectionStartTime', DateTime, default=None)
+    connectionStopTime = Column('connectionStopTime', DateTime, default=None)
 
 
 class Whitelist(Base):
     __tablename__ = 'whitelist'
-    ipv4 = Column('ipv4', String(15), nullable=False,primary_key=True)
+    ipv4 = Column('ipv4', String(15), nullable=False, primary_key=True)
 
 
 
 session = Session()
 Base.metadata.create_all(engine)
-# ad_rule = Rules(rule="Rule 3",loaded=3)
-# session.add(ad_rule)
-#session.execute("Alter table products add rating Integer;")
+session.commit()
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, Numeric, DateTime, BigInteger
+from settings import Session, engine, Base
+import datetime
+import time
+# buildDB.sql scripts automated in sql alchemy
+timestamp = time.time()
+current_date_timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+# attackhistory table
+
+class Attackhistory(Base):
+    __tablename__ = 'attackhistory'
+    attacker_id = Column('attacker_id',String(100), primary_key=True)
+    source_IP = Column('source_IP', String(20), nullable=True)
+    destination_IP = Column('destination_IP', String(20), nullable=True)
+    attackStartTime = Column(DateTime, nullable=True)
+    attackStopTime = Column(DateTime, nullable=True)
+    numberOfPackets = Column('numberOfPackets', Integer, nullable=True)
+
+
+class Blacklist(Base):
+    __tablename__ = 'blacklist'
+    ipAddressuserIP = Column('ipAddress',String(20), primary_key=True)
+    macAddress = Column('macAddress', String(20), nullable=True)
+    blacklistedOn = Column('blacklistedOn',DateTime, nullable=True)
+
+
+class DevicesType(Base):
+    __tablename__ = 'deviceType'
+    type = Column('type', Integer, primary_key=True)
+    name = Column('name', String(45), default="DefaultType")
+
+
+class Devices(Base):
+    __tablename__ = 'devices'
+    deviceID = Column('deviceID', Integer, primary_key=True)
+    name = Column('name', String(45), nullable=False, unique=True)
+    type = Column('type', Integer, nullable=True)
+    ipv4 = Column('ipv4',String(15), nullable=True)
+    ipv6 = Column('ipv6', String(45), nullable=True)
+    mac = Column('mac', String(45), nullable=True)
+
+
+class Login(Base):
+    __tablename__ = 'login'
+    username = Column('username', String(255), primary_key=True, nullable=False)
+    password = Column('password', String(255), nullable=False)
+    remember_token = Column('remember_token', Integer, nullable=True)
+    created_at = Column('created_at', DateTime, nullable=True)
+    updated_at = Column('updated_at', DateTime, nullable=True)
+
+class Logs(Base):
+    __tablename__ = 'logs'
+    switch_id = Column('switch_id', Integer, primary_key=True, nullable=False)
+    port_id = Column('port_id', Integer, primary_key=True, nullable=False)
+    timestamp = Column(DateTime, primary_key=True, nullable=False)
+    rx_packets = Column('rx_packets', Integer, default=0)
+    delta_rx_packets = Column('delta_rx_packets', Integer, default=0)
+    tx_packets = Column('tx_packets', Integer, default=0)
+    delta_tx_packets = Column('delta_tx_packets', Integer, default=0)
+    rx_bytes = Column('rx_bytes', Integer, default=0)
+    delta_rx_bytes = Column('delta_rx_bytes', Integer, default=0)
+    tx_bytes = Column('tx_bytes', Integer, default=0)
+    delta_tx_bytes = Column('delta_tx_bytes', Integer, default=0)
+    rx_dropped = Column('rx_dropped', Integer, default=0)
+    tx_dropped = Column('tx_dropped', Integer, default=0)
+    rx_errors = Column('rx_errors', Integer, default=0)
+    tx_errors = Column('tx_errors', Integer, default=0)
+    rx_fram_err = Column('rx_fram_err', Integer, default=0)
+    rx_over_err = Column('rx_over_err', Integer, default=0)
+    rx_crc_err = Column('rx_crc_err', Integer, default=0)
+    collisions = Column('collisions', Integer, default=0)
+
+
+class PacketLogs(Base):
+    __tablename__ = 'packet_logs'
+    switch_id = Column('switch_id', BigInteger, primary_key=True, nullable=False)
+    trace_id = Column('trace_id', Integer, primary_key=True, nullable=False)
+    frame_number = Column('frame_number', Integer, primary_key=True, nullable=False)
+    frame_time = Column('frame_time', Integer, default=None)
+    frame_time_relative = Column('frame_time_relative', Numeric(30), default=None)
+    frame_protocols = Column('frame_protocols', String(50), default=None)
+    frame_len = Column('frame_len', Integer, default=None)
+    eth_src = Column('eth_src', String(20), default=None)
+    eth_dst = Column('eth_dst', String(20), default=None)
+    eth_type = Column('eth_type', String(10), default=None)
+    ip_proto = Column('ip_proto', Integer, default=None)
+    ip_src = Column('ip_src', String(15), default=None)
+    ip_dst = Column('ip_dst', String(15), default=None)
+
+
+
+class Policies(Base):
+    __tablename__ = 'policies'
+    policyID = Column('policyID', String(36), primary_key=True)
+    deviceID = Column('deviceID', Integer, ForeignKey("devices.deviceID"), nullable=False)
+    policy = Column('policy', String(40), nullable=False)
+    loaded = Column('loaded',Integer, default=None)
+    ipv6 = Column('ipv6', String(45), default=None)
+    mac = Column('mac', String(45), default=None)
+
+
+class Qvm(Base):
+    __tablename__ = 'qvm'
+    qvmUID = Column('qvmUID', String(100), primary_key=True)
+    qvmName = Column('qvmName', String(255), nullable=True)
+    qvmIP = Column('qvmIP', String(20), default=None)
+    qvmStartTime = Column('qvmStartTime',DateTime, default=None)
+    numberOfAttackers = Column('numberOfAttackers', Integer, default=None)
+    currentlyActive = Column('currentlyActive', Integer, default=None)
+
+
+class Rules(Base):
+    __tablename__ = 'rules'
+    rule = Column('rule', String(40), nullable=False, primary_key=True)
+    loaded = Column('loaded', Integer, default=0)
+
+
+class Servers(Base):
+    __tablename__ = 'servers'
+    serverUID = Column('serverUID', String(100), primary_key=True)
+    serverName = Column('serverName', String(1255), default=None)
+    serverIP = Column('serverIP', String(20), default=None)
+    serverCreatedOn = Column('serverCreatedOn', DateTime, default=None)
+    reputationValue = Column('reputationValue', Numeric, default=None)
+    bidValue = Column('bidValue', Numeric, default=None)
+
+
+class SimplePolicies(Base):
+    __tablename__ = 'simple_policies'
+    policyID = Column('policyID', String(36), primary_key=True)
+    deviceSrcID = Column('deviceSrcID', Integer, default=None)
+    deviceDstID = Column('deviceDstID', Integer, default=None)
+    loaded = Column('loaded', Integer, default=None)
+
+
+class SuspiciousnessScores(Base):
+    __tablename__ = 'suspiciousness_scores'
+    deviceID = Column('device_id', Integer, primary_key=True)
+    traceID = Column('traceID', Integer, primary_key=True)
+    ssscore_caluculated_time = Column('ssscore_caluculated_time', DateTime, primary_key=True)
+    score = Column('score', Numeric, default=0)
+
+
+class SuspiciousnessScoresByTime(Base):
+    __tablename__ = 'suspiciousness_scores_by_time'
+    deviceID = Column('device_id', Integer, primary_key=True)
+    traceID = Column('traceID', Integer, primary_key=True)
+    frame_time = Column('frame_time', Integer, primary_key=True)
+    score = Column('score', Numeric, default=0)
+    suspiciousness_caluculated_time = Column('suspiciousness_caluculated_time', DateTime, primary_key=True)
+
+
+class SwitchDevices(Base):
+    __tablename__ = 'switch_devices'
+    switchID = Column('switchID', Integer, ForeignKey("switches.switchID"), nullable=False)
+    deviceID = Column('deviceID', ForeignKey("devices.deviceID"), nullable=False)
+    port = Column('port', Integer, primary_key=True)
+
+
+class Switches(Base):
+    __tablename__ = 'switches'
+    switchID = Column('switchID', Integer, nullable=False,primary_key=True)
+    name = Column('name', String(45), nullable=False, unique=True)
+    totalPorts = Column('totalPorts', Integer, default=0)
+    score = Column('score', Numeric, primary_key=True)
+
+
+class UserMigration(Base):
+    __tablename__ = 'usermigration'
+    userMigrationUID = Column('userMigrationUID', String(100), nullable=False, primary_key=True)
+    userIP = Column('userIP', String(45), nullable=True)
+    originalServerIP = Column('originalServerIP', String(45), default=None)
+    migratedServerIP = Column('migratedServerIP', String(45), default=None)
+    migrationStartTime = Column('migrationStartTime', DateTime, default=None)
+    migrationStopTime = Column('migrationStopTime', DateTime, default=None)
+
+
+class Users(Base):
+    __tablename__ = 'users'
+    userUID = Column('userMigrationUID', String(100), nullable=False, primary_key=True)
+    username = Column('username', String(100), default=None)
+    ipAddressuserIP = Column('ipAddress', String(20), default=None)
+    serverIP = Column('serverIP', String(20), default=None)
+    connectionStartTime = Column('connectionStartTime', DateTime, default=None)
+    connectionStopTime = Column('connectionStopTime', DateTime, default=None)
+
+
+class Whitelist(Base):
+    __tablename__ = 'whitelist'
+    ipv4 = Column('ipv4', String(15), nullable=False, primary_key=True)
+
+
+
+session = Session()
+Base.metadata.create_all(engine)
 session.commit()
