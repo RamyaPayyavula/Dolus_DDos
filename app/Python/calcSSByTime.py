@@ -1,8 +1,6 @@
-import sys
-from sqlalchemy import func
-from settings import Session
-from models import PacketLogs
 import datetime
+import MySQLdb
+import MySQLdb.cursors
 import time
 
 timestamp = time.time()
@@ -10,37 +8,43 @@ current_date_timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y
 
 
 def calculateSSByTime(trace_id, device_id):
-    session = Session()
-    # findMin = session.query(func.min(Product.price), func.max(Product.price)).filter(Product.title=="Jones").one()
-    findMin = session.query(func.min(PacketLogs.frame_time), func.max(PacketLogs.frame_time)).filter(
-        PacketLogs.trace_id == trace_id).one()
-    minFrame = findMin[0]
-    maxFrame = findMin[1]
+    db = MySQLdb.connect(user='root', passwd='root', host='127.0.0.1', db='test',
+                         cursorclass=MySQLdb.cursors.DictCursor)
+    cursor = db.cursor()
+    findMin = "SELECT MIN(frame_time) as minFrameTime, MAX(frame_time) as maxFrameTime FROM packet_logs where trace_id = " + str(trace_id) + ";"
+    cursor.execute(findMin)
+    results = cursor.fetchone()
+
+    minFrame = results["minFrameTime"]
+    maxFrame = results["maxFrameTime"]
     try:
         while minFrame < maxFrame:
-            query = f"""INSERT INTO suspiciousness_scores_by_time(device_id,traceID,suspiciousness_caluculated_time,frame_time,score) VALUES({str(device_id)},{str(trace_id)},{str(current_date_timestamp)},{str(minFrame)},
-                    (SELECT SUM(POWER(((POWER(((connections_total - connections_min) / (connections_max - connections_min)),2) + 
-            		POWER(((flows_total - flows_min) / (flows_max - flows_min)),2) + 
-            		POWER(((bytes_total - bytes_min) / (bytes_max - bytes_min)),2) )/3),(1.0/2.0))) 'score' 
-            		FROM (SELECT d.name, COUNT(DISTINCT ip_dst) AS 'connections_total', 
-            		CASE WHEN d.name LIKE 'server%' THEN 10 ELSE 1 END AS 'connections_min', 
-            		CASE WHEN d.name LIKE 'server%' THEN 1000 ELSE 10 END AS 'connections_max' 
-            		FROM packet_logs l, devices d 
-            		WHERE d.ipv4 = l.ip_src AND ip_src <> ' ' AND ip_dst <> ' ' 
-            		AND trace_id = {str(trace_id)} AND frame_time >= {str(minFrame)}
-            		AND frame_time < {str(maxFrame)} + 10 GROUP BY d.name) a, 
-            		(SELECT d.name, count(*) AS 'flows_total', CASE WHEN d.name LIKE 'server%' THEN 1000 ELSE 100 END AS 'flows_min', 
-            		CASE WHEN d.name LIKE 'server%' THEN 10000 ELSE 1000 END AS 'flows_max' 
-            		FROM packet_logs l, devices d WHERE d.ipv4 = l.ip_src AND ip_src <> ' ' AND ip_dst <> ' ' 
-            		AND trace_id = {str(trace_id)} AND frame_time >= {str(minFrame)} AND frame_time <{str(maxFrame)}+ 10 GROUP BY d.name) b, 
-            		(SELECT d.name , SUM(frame_len) AS 'bytes_total', CASE WHEN d.name LIKE 'server%' THEN 100000 ELSE 100 END AS 'bytes_min', 
-            		CASE WHEN d.name LIKE 'server%' THEN 100000000 ELSE 100000 END AS 'bytes_max' 
-            		FROM packet_logs l, devices d WHERE d.ipv4 = l.ip_src AND ip_src <> ' ' AND ip_dst <> ' ' 
-            		AND trace_id = {str(trace_id)} AND frame_time >= {str(minFrame)} AND frame_time < {str(maxFrame)} + 10 
-            		GROUP BY d.name) c WHERE a.name = b.name AND a.name = c.name));"""
+            db = MySQLdb.connect(user='root', passwd='root', host='127.0.0.1', db='test',
+                                 cursorclass=MySQLdb.cursors.DictCursor)
+            cursor = db.cursor()
+            query = "INSERT INTO suspiciousness_scores SELECT " + str(device_id) + "," + str(trace_id) + "," + str(
+                current_date_timestamp) + ",g.name, g.score"
+            query += " FROM (SELECT a.name, a.bytes_total, a.bytes_min, a.bytes_max, a.flows_total,"
+            query += "a.flows_min, a.flows_max, a.connections_total, a.connections_min, a.connections_max,"
+            query += "(connections_total - connections_min) / (connections_max - connections_min)"
+            query += "as 'connections_normalized',(flows_total - flows_min) / (flows_max - flows_min)"
+            query += "as 'flows_normalized',(bytes_total - bytes_min) / (bytes_max - bytes_min) as 'bytes_normalized',"
+            query += "POWER(((POWER(((connections_total - connections_min) / (connections_max - connections_min)),2)"
+            query += "+ POWER(((flows_total - flows_min) / (flows_max - flows_min)),2)"
+            query += "+POWER(((bytes_total - bytes_min) / (bytes_max - bytes_min)),2))/3),(1.0/2.0)) 'score'"
+            query += " from("
+            query += "SELECT d.name, SUM(l.frame_len) as 'bytes_total', case when d.name like 'server%' then 100000 else 100 end as 'bytes_min',"
+            query += "case when d.name like 'server%' then 100000000 else 100000 end as 'bytes_max',"
+            query += "count(*) as 'flows_total',case when d.name like 'server%' then 1000 else 100 end as 'flows_min',"
+            query += "case when d.name like 'server%' then 10000 else 1000 end as 'flows_max',"
+            query += "COUNT(DISTINCT l.ip_dst) AS 'connections_total',case when d.name like 'server%' then 10 else 1 end as 'connections_min',"
+            query += "case when d.name like 'server%' then 1000 else 10 end as 'connections_max'"
+            query += "FROM packet_logs l, devices d WHERE d.ipv4 = l.ip_src and l.ip_src <> ' '"
+            query += "and l.ip_dst <> ' ' and trace_id = " + str(trace_id) + " and frame_time >= " + str(minFrame) + " and frame_time < " + str(minFrame) + " + 10 group by d.name) a	) g;"
+
             # print(query)
-            session.execute(query)
+            cursor.execute(query)
             minFrame += 10
-            session.commit()
+            db.commit()
     except TypeError:
         print('there is no value in Minframe and Max Frame')
