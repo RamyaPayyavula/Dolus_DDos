@@ -19,6 +19,4 @@ records = session.query(SuspiciousnessScores).all()
 for rec in records:
     trace_id1 = rec.traceID
     device_id = rec.deviceID
-    calculateSSByTime(trace_id1, device_id)
-
-
+    calculateSSByTime(trace_id, device_id)
