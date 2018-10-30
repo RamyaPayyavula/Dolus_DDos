@@ -50,7 +50,7 @@ class MyApp(frenetic.App):
         pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.10.6.1")) >> SetPort(7)
 
         session = Session()
-        policies = session.query(Policy.policy).filter_by(loaded=1)
+        policies = session.query(Policies).filter_by(loaded=1)
         custom_policies =''
         for p in Policies:
             custom_policies = custom_policies | p.policy
