@@ -45,6 +45,17 @@ class HomeWrapperClass
         return $_arr;
 
     }
+    public function insertIntoUserMigrations($userMigrationsUID,$userIP,$originalServerIP,$migratedServerIP){
+        $db = 'test';
+        $table = "usermigration";
+        $migrationStartTime=date("Y-m-d h:i:s");
+        $migrationStopTime = date('Y-m-d H:i:s', strtotime("+30 minutes"));
+
+        DB::table($table)->insert(
+            ['userMigrationUID' => $userMigrationsUID, 'userIP' => $userIP,'originalServerIP' => $originalServerIP,'migratedServerIP'=> $migratedServerIP, 'migrationStartTime' => $migrationStartTime,'migrationStopTime' => $migrationStopTime]
+        );
+
+    }
     public function getAllUserMigrations(){
         #$db = 'test';
         $table = "usermigration";
@@ -53,6 +64,15 @@ class HomeWrapperClass
         $_arr = $this->convertStdclassArrayToArray($data);
 
         return $_arr;
+
+    }
+    public function insertIntoBlackLists($ipAddress,$macAddress){
+        $db = 'test';
+        $table = "blacklist";
+        $blacklistedOn=date("Y-m-d h:i:s");
+        DB::table($table)->insert(
+            ['ipAddress' => $ipAddress, 'macAddress' => $macAddress,'blacklistedOn' => $blacklistedOn]
+        );
 
     }
     public function getAllBlacklistIPs(){
@@ -65,11 +85,101 @@ class HomeWrapperClass
         return $_arr;
 
     }
+    public function getABlacklistIPs($ipAddress){
+        #$db = 'test';
+        $table = "blacklist";
+
+        $data = DB::connection('mysql')->table($table)->where('ipAddress', $ipAddress)->get();
+        $_arr = $this->convertStdclassArrayToArray($data);
+
+        return $_arr;
+
+    }
+    public function deleteABlacklistedIP($ipAddress){
+        $table = "blacklist";
+        DB::table($table)->where('ipAddress', '=',$ipAddress)->delete();
+
+    }
+    public function getAllWhiteListIPs()
+    {
+        #$db = 'test';
+        $table = "whitelist";
+
+        $data = DB::connection('mysql')->table($table)->get();
+        $_arr = $this->convertStdclassArrayToArray($data);
+
+        return $_arr;
+    }
+    public function getAWhiteListIPs($ipAddress){
+        #$db = 'test';
+        $table = "whitelist";
+
+        $data = DB::connection('mysql')->table($table)->where('ipv4', $ipAddress)->get();
+        $_arr = $this->convertStdclassArrayToArray($data);
+
+        return $_arr;
+
+    }
+    public function insertIntoWhiteListIPs($ipv4)
+    {
+        $db = 'test';
+        $table = "whitelist";
+        DB::table($table)->insert(
+            ['ipv4' => $ipv4]
+        );
+
+    }
+
+
+    public function insertIntoAttacks($attacker_id,$sourceIP,$destinationIP){
+        $db = 'test';
+        $table = "attackhistory";
+        $attackStopTime = date('Y-m-d H:i:s', strtotime("+30 minutes"));
+        $attackStartTime=date("Y-m-d h:i:s");
+        DB::table($table)->insert(
+            ['attacker_id' => $attacker_id, 'source_IP' => $sourceIP,'destination_IP' => $destinationIP, 'attackStartTime' => $attackStartTime,'attackStopTime' => $attackStopTime]
+        );
+
+    }
     public function getAllAttacks(){
         #$db = 'test';
         $table = "attackhistory";
 
         $data = DB::connection('mysql')->table($table)->get();
+        $_arr = $this->convertStdclassArrayToArray($data);
+
+        return $_arr;
+
+    }
+    public function getNoofAttackers(){
+        $table = "attackhistory";
+
+        $data = DB::connection('mysql')->table($table)->select('source_IP')->distinct()->get();
+        $_arr = $this->convertStdclassArrayToArray($data);
+
+        return $_arr;
+    }
+    public function updateQVM($qvmIP,$no_of_attacks){
+        $table = 'qvm';
+        DB::table($table)
+            ->where('qvmIP', $qvmIP)
+            ->update(['numberOfAttackers' => $no_of_attacks]);
+    }
+    public function getAllPacketLogs(){
+        #$db = 'test';
+        $table = "packet_logs";
+
+        $data = DB::connection('mysql')->table($table)->get();
+        $_arr = $this->convertStdclassArrayToArray($data);
+
+        return $_arr;
+
+    }
+    public function getAllPacketLogsByDevice($eth_src){
+        #$db = 'test';
+        $table = "packet_logs";
+
+        $data = DB::connection('mysql')->table($table)->where('eth_src', $eth_src)->get();
         $_arr = $this->convertStdclassArrayToArray($data);
 
         return $_arr;
@@ -85,6 +195,16 @@ class HomeWrapperClass
         return $_arr;
 
     }
+    public function getASwitch($switch_id){
+        #$db = 'test';
+        $table = "switches";
+
+        $data = DB::connection('mysql')->table($table)->where('switchID', $switch_id)->get();
+        $_arr = $this->convertStdclassArrayToArray($data);
+
+        return $_arr;
+
+    }
     public function getAllDevices(){
         #$db = 'test';
         $table = "devices";
@@ -95,11 +215,41 @@ class HomeWrapperClass
         return $_arr;
 
     }
+    public function getADevices($device_id){
+        #$db = 'test';
+        $table = "devices";
+
+        $data = DB::connection('mysql')->table($table)->where('deviceID', $device_id)->get();
+        $_arr = $this->convertStdclassArrayToArray($data);
+
+        return $_arr;
+
+    }
+    public function getAServerByIPAddress($ipv4){
+        #$db = 'test';
+        $table = "servers";
+
+        $data = DB::connection('mysql')->table($table)->where('serverIP', $ipv4)->get();
+        $_arr = $this->convertStdclassArrayToArray($data);
+
+        return $_arr;
+
+    }
     public function getAllSwtichDevices(){
         #$db = 'test';
         $table = "switch_devices";
 
         $data = DB::connection('mysql')->table($table)->get();
+        $_arr = $this->convertStdclassArrayToArray($data);
+
+        return $_arr;
+
+    }
+    public function getASwitchByDevices($device_id){
+        #$db = 'test';
+        $table = "switch_devices";
+
+        $data = DB::connection('mysql')->table($table)->where('deviceID', $device_id)->get();
         $_arr = $this->convertStdclassArrayToArray($data);
 
         return $_arr;
@@ -116,10 +266,11 @@ class HomeWrapperClass
 
     }
     public function setPolicies($policyID,$deviceID,$policy,$loaded,$ipv6, $mac){
-        $db = 'test';
         $table = "policies";
-        $sql = "INSERT INTO $table(`policyID `,`deviceID`,`policy`,`loaded`,`ipv6`,`mac`) VALUES ('$policyID','$deviceID','$policy','$loaded','$ipv6','$mac')";
-        DB::connection($db)->select($sql);
+
+        DB::table($table)->insert(
+            ['policyID' => $policyID, 'deviceID' => $deviceID,'policy' => $policy, 'loaded' => $loaded,'ipv6' => $ipv6,'mac'=>$mac]
+        );
 
     }
     public function deletePolicies($deviceID){
