@@ -1,7 +1,67 @@
 <?php
+use App\Classes\HomeWrapperClass;
 $devices = $info['devices'];
 $policies = $info['policies'];
+$home_wrapper= new HomeWrapperClass();
 
+if ( isset( $_GET['submit'] ) ){
+    $whiteListID = $_REQUEST['WLID'];
+    $blackListID = $_REQUEST['BLID'];
+    if($blackListID != $whiteListID){
+        if($blackListID !="none"){
+            $device_data = $home_wrapper->getADevices(intval($blackListID));
+            if(count($device_data)>0){
+                $is_already_blacklisted = $home_wrapper->getABlacklistIPs($device_data[0]['ipv4']);
+                $is_whitelisted = $home_wrapper->getAWhiteListIPs($device_data[0]['ipv4']);
+                if(count($is_already_blacklisted) <=0 && count($is_whitelisted)<=0) {
+                    $ipAddress = $device_data[0]['ipv4'];
+                    $macAddress = $device_data[0]['mac'];
+                    $home_wrapper->insertIntoBlackLists($ipAddress,$macAddress);
+                }
+
+            }
+        }
+        if($whiteListID != "none"){
+            $device_data = $home_wrapper->getADevices(intval($whiteListID));
+
+            if(count($device_data)>0){
+                $is_whitelisted = $home_wrapper->getAWhiteListIPs($device_data[0]['ipv4']);
+                if(count($is_whitelisted)<=0){
+                    $ipv4 = $device_data[0]['ipv4'];
+                    $home_wrapper->insertIntoWhiteListIPs($ipv4);
+                    $home_wrapper->deleteABlacklistedIP($ipv4);
+                }
+
+            }
+
+        }
+    }
+}
+$switch_devices = $home_wrapper->getAllSwtichDevices();
+$networkdata=array();
+$switches = $home_wrapper->getAllSwitches();
+for($i=0;$i<count($switches);$i++){
+    $networkdata[$i][0] = 'Controller'.' '.strval($switches[$i]['name']);
+}
+$len = count($networkdata);
+for($i=0;$i<count($switch_devices);$i++){
+    $current_device = $home_wrapper->getADevices($switch_devices[$i]['deviceID']);
+    $current_switch = $home_wrapper-> getASwitch($switch_devices[$i]['switchID']);
+    if(count($current_switch)>0){
+        $switch_name = $current_switch[0]['name'];
+    }
+    else{
+        $switch_name = 0;
+    }
+    if(count($current_device)>0){
+        $device_name = $current_device[0]['name'];
+    }
+    else{
+        $device_name = 'Server'.($switch_devices[$i]['deviceID']);
+    }
+    $networkdata[$len][0] = 'Controller'.' '.strval($switch_name).' '.strval($device_name);
+    $len=$len+1;
+}
 ?>
 
 
@@ -15,7 +75,25 @@ $policies = $info['policies'];
         <title>MTD | Blacklist</title>
 
         <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {packages:['wordtree']});
+            google.charts.setOnLoadCallback(drawChart);
 
+            function drawChart() {
+                // Define the chart to be drawn.
+                var data = new google.visualization.arrayToDataTable(<?php echo(json_encode($networkdata)) ?>);
+                var options = {
+                    wordtree: {
+                        format: 'implicit',
+                        word: 'Controller'
+                    }
+                };
+                var chart = new google.visualization.WordTree(document.getElementById('wordtree_basic'));
+                chart.draw(data, options);
+            }
+        </script>
         <style>
             .info-box-number{
                 font-size:32px;
@@ -24,6 +102,7 @@ $policies = $info['policies'];
                 font-size:12px;
             }
         </style>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
     </head>
@@ -41,86 +120,53 @@ $policies = $info['policies'];
                         <div class="box-header with-border">
                             <div class="row">
                                 <div class="col-md-6 text-left" style="padding-top:5px">
-                                    <h3 class="box-title">Policy Table</h3>
+                                    <form method="get" action={{route('pages.policies')}} >
+                                        <br/>
+                                        <br/>
+                                        <div>
+                                            <label for="blaclistedID">Select the device to be Balcklisted:</label>
+                                            <select id="deviceBlacklist" class="form-control" name='BLID'>
+                                                <?php
+                                                // Append Body
+                                                if(count($devices) > 0){
+                                                    echo "<option device-id='BLID' value='none' selected>None</option>";
+                                                    for($i=0; $i<count($devices);$i++){
+                                                        $deviceID = $devices[$i]["deviceID"];
+                                                        $deviceName = $devices[$i]["name"];
+                                                        echo "<option device-id='BLID' value='".$deviceID."'>".$deviceName."</option>";
+
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <br/>
+
+                                        <div>
+                                            <label for="whiteListedID">Select the device to be Whitelisted:</label>
+                                            <select id="deviceWhiteList" class="form-control" name='WLID'>
+                                                <?php
+                                                // Append Body
+                                                if(count($devices) > 0){
+                                                    echo "<option device-id='WLID' value='none' selected>None</option>";
+                                                    for($i=0; $i<count($devices);$i++){
+                                                        $deviceID = $devices[$i]["deviceID"];
+                                                        $deviceName = $devices[$i]["name"];
+                                                        echo "<option device-id='WLID' value='".$deviceID."'>".$deviceName."</option>";
+
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                        <input type="submit" name="submit" value="submit">
+
+                                    </form>
                                 </div>
-                                <div class="col-md-6 text-right">
-                                    <button class="btn btn-primary" onclick="addNewPolicy()">Add New Policy</button>
-                                </div>
-                                <p id="addingPolicy"></p>
                             </div>
-                        </div>
-                        <!-- /.box-header -->
-                        <h4 id="update_success" class='text-center hidden' style="background-color:#00a65a; margin-top:0; padding:10px; color:white">Successfully Updated</h4>
-                        <h4 id="update_fail" class='text-center hidden' style="background-color:#e44343; margin-top:0; padding:10px; color:white">Failed to Update</h4>
-
-                        <!-- form start -->
-                        <div id="policyTableBody" class="box-body">
-                            <table id="policyTable" class="table table-responsive table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Device</th>
-                                    <th width="65%">Filter Policies</th>
-                                    <th width="5%">Loaded</th>
-                                    <th width="5%">Remove</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php
-                                 if(count($policies)>0){
-                                    for ($i=0; $i<count($policies); $i++){
-
-                                        $devID = $policies[$i]["deviceID"];
-                                        $polID = $policies[$i]["policyID"];
-                                        $pols = $policies[$i]["policy"];
-                                        $loaded = $policies[$i]["loaded"];
-
-                                        echo "<tr policy-id='".$polID."'><td>";
-                                        echo "<select class='form-control device'>";
-                                        echo "<option value='na'>Select One</option>";
-                                        for($j=0; $j<count($devices);$j++){
-
-                                            $id = $devices[$j]["deviceID"];
-                                            $name = $devices[$j]["name"];
-                                            $ip = $devices[$j]["ipv4"];
-                                            $mac = $devices[$j]["mac"];
-                                            if($devID == $id){
-                                                echo "<option value='".$id."' selected>".$name." (".$ip.")"."</option>";
-                                            } else {
-                                                echo "<option value='".$id."'>".$name."(".$ip.")"."</option>";
-                                            }
-                                        }
-                                        echo "</select></td>";
-                                        echo "<td><textarea class='form-control policy' rows='4' placeholder='Enter Filter Policies'>".$pols."</textarea></td>";
-                                        echo "<td class='text-center loaded'>".$loaded."</td>";
-                                        echo "<td><button class='btn btn-danger' onclick='removePolicy($(this))'><span class='fa fa-times'></span></button></td>";
-                                        echo "</tr>";
-                                    }
-                                } else {
-//                                    $utilities = new utilities();
-//                                    $polID = strtoupper($utilities->randomNumber());
-                                     $polID = 1;
-                                    echo "<tr policy-id='".$polID."'><td>";
-                                    echo "<select class='form-control device'>";
-                                    echo "<option value='na'>Select One</option>";
-
-                                    for($i=0; $i<count($devices);$i++){
-
-                                        echo "<option value='".$devices[$i]["deviceID"]."'>".$devices[$i]["name"]."</option>";
-                                    }
-                                    echo "</select></td>";
-                                    echo "<td><textarea class='form-control policy' placeholder='Enter Filter Policies' rows='4'></textarea></td>";
-                                    echo "<td class='text-center loaded'>0</td>";
-                                    echo "<td><button class='btn btn-danger' onclick='removePolicy($(this))'><span class='fa fa-times'></span></button></td></tr>";
-                                }
-                                ?>
-                                <!-- JQUERY -->
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.box-body -->
-                        <div class="box-footer">
-                            <button type="button" onclick="updatePolicy()" class="btn btn-success pull-right">Update Policy</button>
-                            <!-- <button type="button" onclick="insertNetKAT()" class="btn btn-success pull-right">Insert NetKAT</button> -->
                         </div>
                         <!-- /.box-footer -->
                     </div>
@@ -135,33 +181,10 @@ $policies = $info['policies'];
                         <div class="box-header with-border">
                             <i class="fa fa-line-chart"></i>
                             <h3 class="box-title">Network Graph</h3>
+                            <div id="wordtree_basic" height="500px"/>
+
                         </div>
-                        <div class="box-body">
-                            <div class="col-xs-12 col-md-8">
-                                <div class="row" style="margin-bottom:10px">
-                                    <div id="mynetwork"></div>
-                                </div>
-                                <div class="row">
-                                    <button class="btn btn-primary" onclick="draw()">Show Network</button>
-                                    <input type="hidden" id="switchesJSON"/>
-                                    <input type="hidden" id="networkJSON"/>
-                                </div>
-                            </div>
-                            <div id="network-info-box" class="col-xs-12 col-md-4">
-                                <table id="network-info" class="table table-responsive table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>No Data</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>Found !</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -171,19 +194,6 @@ $policies = $info['policies'];
 
 </div>
 <!-- ./wrapper -->
-
-<script>
-    function addNewPolicy() {
-        var div = document.createElement("div");
-        div.style.marginTop ="20px";
-        div.style.marginRight = "100px";
-        div.style.marginLeft = "100px";
-        div.style.marginBottom = "20px";
-        div.style.height = "100px";
-        div.innerHTML = "<textarea name=\"message\" rows=\"5\" cols=\"100\"></textarea><input type=\"submit\">";
-        document.getElementById("addingPolicy").appendChild(div);
-    }
-</script>
 </body>
 </html>
 @endsection
