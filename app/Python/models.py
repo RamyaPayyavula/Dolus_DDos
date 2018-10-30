@@ -14,7 +14,6 @@ class Attackhistory(Base):
     destination_IP = Column('destination_IP', String(20), nullable=True)
     attackStartTime = Column(DateTime, nullable=True)
     attackStopTime = Column(DateTime, nullable=True)
-    numberOfPackets = Column('numberOfPackets', Integer, nullable=True)
 
 
 class Blacklist(Base):
@@ -63,10 +62,9 @@ class Policies(Base):
     __tablename__ = 'policies'
     policyID = Column('policyID', String(36), primary_key=True)
     deviceID = Column('deviceID', Integer, nullable=False)
-    policy = Column('policy', String(40), nullable=False)
+    policy = Column('policy', String(400), nullable=False)
     loaded = Column('loaded',Integer, default=None)
-    ipv6 = Column('ipv6', String(45), default=None)
-    mac = Column('mac', String(45), default=None)
+    src_ip = Column('src_ip', String(45), default=None)
 
 
 class Qvm(Base):
@@ -136,10 +134,9 @@ class UserMigration(Base):
 
 class Users(Base):
     __tablename__ = 'users'
-    userUID = Column('userMigrationUID', String(100), nullable=False, primary_key=True)
+    userUID = Column('userID', String(100), nullable=False, primary_key=True)
     username = Column('username', String(100), default=None)
     ipAddressuserIP = Column('ipAddress', String(20), default=None)
-    serverIP = Column('serverIP', String(20), default=None)
     connectionStartTime = Column('connectionStartTime', DateTime, default=None)
     connectionStopTime = Column('connectionStopTime', DateTime, default=None)
 
