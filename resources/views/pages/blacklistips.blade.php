@@ -84,7 +84,7 @@ if(count($blacklistips) > 0){
                                     // Append Body
                                     if(count($blacklistips) > 0){
                                         for($i=0; $i<count($blacklistips);$i++){
-                                            $userIP = $blacklistips[$i]["userIP"];
+                                            $userIP = $blacklistips[$i]["ipAddress"];
                                             $macAddress = $blacklistips[$i]["macAddress"];
                                             $blacklistedOn = $blacklistips[$i]["blacklistedOn"];
                                             // Create Table Row
