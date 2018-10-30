@@ -21,33 +21,42 @@ class MyApp(frenetic.App):
         self.topo = {}
 
     def connected(self):
-        root_switch = 240109237270094
-        pol = Filter(SwitchEq(root_switch) & IP4DstEq("10.10.2.2")) >> SetPort(3)
-        pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.10.3.2")) >> SetPort(2)
-        pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.10.4.2")) >> SetPort(1)
+        root_switch = 196040413341508
+        pol = Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.102")) >> SetPort(2)
+        pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.103")) >> SetPort(3)
+        pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.104")) >> SetPort(4)
+		
+		pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.105")) >> SetPort(1)
 
-        pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.10.2.1")) >> SetPort(3)
-        pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.10.3.1")) >> SetPort(2)
-        pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.10.4.1")) >> SetPort(1)
+		pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.106")) >> SetPort(1)
+		
+		pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.107")) >> SetPort(1)
+		
+		pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.108")) >> SetPort(1)
+		
+		pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.109")) >> SetPort(1)
 
-        slave_switch_1 = 47138562302797
-        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.10.7.2")) >> SetPort(2)
-        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.10.7.1")) >> SetPort(2)
+		pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.110")) >> SetPort(1)
 
-        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.10.8.2")) >> SetPort(3)
-        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.10.8.1")) >> SetPort(3)
+   
 
-        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.10.5.2")) >> SetPort(4)
-        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.10.5.1")) >> SetPort(4)
+        slave_switch_1 = 77043891114308
+        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.105")) >> SetPort(5)
+		
+        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.106")) >> SetPort(6)
+		
+        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.107")) >> SetPort(7)
+		
+        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.108")) >> SetPort(3)
 
-        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.10.10.2")) >> SetPort(5)
-        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.10.10.1")) >> SetPort(5)
-
-        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.10.9.2")) >> SetPort(6)
-        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.10.9.1")) >> SetPort(6)
-
-        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.10.6.2")) >> SetPort(7)
-        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.10.6.1")) >> SetPort(7)
+        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.109")) >> SetPort(4)
+		
+        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.110")) >> SetPort(2)
+		
+		pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.102")) >> SetPort(1)
+        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.103")) >> SetPort(1)
+        pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.104")) >> SetPort(1)
+		
 
         session = Session()
         policies = session.query(Policies).filter_by(loaded=1)
