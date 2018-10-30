@@ -51,13 +51,8 @@ class MyApp(frenetic.App):
 
         session = Session()
         policies = session.query(Policies).filter_by(loaded=1)
-        custom_policies =''
-        for p in Policies:
-            custom_policies = custom_policies | p.policy
-
-        print(custom_policies)
-        pol = pol | custom_policies
-
+        for p in policies:
+            pol = pol | Filter(SwitchEq(p.switch2) & IP4DstEq(p.dst_IP) & IP4SrcEq(p.src_ip)) >> SetPort(p.senderPort)| Filter(SwitchEq(p.switch1) & IP4DstEq(p.src_ip) & IP4SrcEq(p.dst_IP)) >> SetPort(p.receiverPort)
 
 
         app.update(pol)
