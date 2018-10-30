@@ -3,11 +3,11 @@ use App\Classes\HomeWrapperClass;
 $devices = $info['devices'];
 
 if(isset($_COOKIE['selectedDeviceID'])) {
-        $selectedDeviceID = intval($_COOKIE['selectedDeviceID']);
-    }
-    else{
-        $selectedDeviceID=1;
-    }
+    $selectedDeviceID = intval($_COOKIE['selectedDeviceID']);
+}
+else{
+    $selectedDeviceID=1;
+}
 if(isset($_COOKIE['distinctIPDevice'])){
     $distinctIPDevice = $_COOKIE['distinctIPDevice'];
 }
