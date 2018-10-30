@@ -1,16 +1,6 @@
 
-from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, Numeric, DateTime, BigInteger
-from settings import Session, engine, Base
-import datetime
-import time
-from models import Devices, Qvm, Servers, SwitchDevices, Switches
+$startTimeafter30Min = date('Y-m-d H:i:s', strtotime("+30 minutes"));
 
-timestamp = time.time()
-current_date_timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
-
-
-# inserting data here
-session = Session()
 
 # inserting in Devices tables
 objects = [
@@ -23,6 +13,17 @@ objects = [
 ]
 session.bulk_save_objects(objects)
 session.commit()
+
+# inserting in Users tables
+Users(userID="1", username='user1', ipAddress='10.0.0.107','connectionStartTime'=current_date_timestamp),
+    Users(userID="2", username='user2', ipAddress='10.0.0.109,'connectionStartTime'=$startTimeafter30Min),
+    Users(userID="3", username='attacker1', ipAddress='10.0.0.108','connectionStartTime'=current_date_timestamp),
+    Users(userID="4", username='attacker2', ipAddress='10.0.0.110','connectionStartTime'=$startTimeafter30Min),
+    Users(userID="5", username='attacker3', ipAddress='10.0.0.106','connectionStartTime'=current_date_timestamp),
+    Users(userID="6", username='qvm', ipAddress='10.0.0.105','connectionStartTime'=$startTimeafter30Min)
+session.bulk_save_objects(objects)
+session.commit()
+
 
 # inserting into Qvm
 
@@ -73,3 +74,4 @@ session.commit()
 # ad_rule = Rules(rule="Rule 3",loaded=3)
 # session.add(ad_rule)
     #session.execute("Alter table suspiciousness_scores add name String(20);")
+
