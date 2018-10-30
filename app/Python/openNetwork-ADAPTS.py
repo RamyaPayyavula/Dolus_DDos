@@ -26,17 +26,17 @@ class MyApp(frenetic.App):
         pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.103")) >> SetPort(3)
         pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.104")) >> SetPort(4)
 		
-		pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.105")) >> SetPort(1)
+	pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.105")) >> SetPort(1)
 
-		pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.106")) >> SetPort(1)
+	pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.106")) >> SetPort(1)
 		
-		pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.107")) >> SetPort(1)
+	pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.107")) >> SetPort(1)
 		
-		pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.108")) >> SetPort(1)
+	pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.108")) >> SetPort(1)
 		
-		pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.109")) >> SetPort(1)
+	pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.109")) >> SetPort(1)
 
-		pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.110")) >> SetPort(1)
+	pol = pol | Filter(SwitchEq(root_switch) & IP4DstEq("10.0.0.110")) >> SetPort(1)
 
    
 
@@ -53,7 +53,7 @@ class MyApp(frenetic.App):
 		
         pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.110")) >> SetPort(2)
 		
-		pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.102")) >> SetPort(1)
+	pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.102")) >> SetPort(1)
         pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.103")) >> SetPort(1)
         pol = pol | Filter(SwitchEq(slave_switch_1) & IP4DstEq("10.0.0.104")) >> SetPort(1)
 		
