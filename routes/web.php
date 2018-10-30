@@ -19,7 +19,7 @@ Route::get("/users" , 'DataCenter\DolusController@getUserDetails')->name('pages.
 Route::get("/qvms" , 'DataCenter\DolusController@getQVMDetails')->name('pages.qvms');
 Route::get("/blacklistips" , 'DataCenter\DolusController@getBacklistedIPs')->name('pages.blacklistips');
 Route::get("/usermigrations" , 'DataCenter\DolusController@getUserMigrationDetails')->name('pages.usermigrations');
-Route::get("/attackhistory" , 'DataCenter\DolusController@getAllAttckHistory')->name('pages.attackhistory');
+Route::get("/attackhistory" , 'DataCenter\DolusController@getAllAttackHistory')->name('pages.attackhistory');
 Route::get("/switchdevices" , 'DataCenter\DolusController@getSwitchAndDevices')->name('pages.switchdevices');
 Route::get("/policies" , 'DataCenter\DolusController@getPolicies')->name('pages.policies');
 Route::get("/suspicious" , 'DataCenter\DolusController@getSuspiciousness')->name('pages.suspicious');
