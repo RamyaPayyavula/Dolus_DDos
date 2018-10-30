@@ -78,7 +78,6 @@ if(count($servers) > 0){
                                     <tr>
                                         <th class='text-center'>Server UID</th>
                                         <th class='text-center'>Server Name</th>
-                                        <th class='text-center'>Server IP</th>
                                         <th class='text-center'>Server Created On</th>
                                         <th class='text-center'>Reputation Value</th>
                                         <th class='text-center'>Bid Value</th>
@@ -94,7 +93,6 @@ if(count($servers) > 0){
                                         for($i=0; $i<count($servers);$i++){
                                             $serverUID = $servers[$i]["serverUID"];
                                             $serverName = $servers[$i]["serverName"];
-                                            $serverIP = $servers[$i]["serverIP"];
                                             $serverCreatedOn = $servers[$i]["serverCreatedOn"];
                                             $reputationValue = $servers[$i]["reputationValue"];
                                             $bidValue = $servers[$i]["bidValue"];
@@ -124,7 +122,6 @@ if(count($servers) > 0){
                                             echo "<tr>";
                                             echo "<td>".$serverUID."</td>";
                                             echo "<td>".$serverName."</td>";
-                                            echo "<td>".$serverIP."</td>";
                                             echo "<td>".$serverCreatedOn."</td>";
                                             echo "<td><span class='label ".$repLabel."'>".$reputationValue."</span></td>";
                                             echo "<td><span class='label ".$bidLabel."'>".$bidValue."</span></td>";
