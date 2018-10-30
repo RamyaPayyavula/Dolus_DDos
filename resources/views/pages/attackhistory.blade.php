@@ -38,7 +38,7 @@ if(count($attackHistory) > 0){
                 // Define the chart to be drawn.
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'Month');
-                data.addColumn('number', 'No of Servers(count)');
+                data.addColumn('number', 'No of Attacks');
                 data.addRows(<?php echo(json_encode($attackers_on_months)) ?>);
                 var options = {'title':'Number of Attackers attaked per Month in the year 2018',
                     'orientation': 'horizontal',
