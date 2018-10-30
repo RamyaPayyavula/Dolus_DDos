@@ -166,7 +166,7 @@ public function getServerDetails(Request $request)
                                  $deviceID = $device_id;
                                  $loaded = 1;
                                  $ipv6 = $device_details[0]['ipv6'];
-                                 $home_wrapper->setPolicies($policyID,$deviceID,$policy,$loaded,$ipv6,$macaddress);
+                                 $home_wrapper->setPolicies($policyID,$deviceID,$policy,$loaded,$ipv6);
                              }
 
                          }
