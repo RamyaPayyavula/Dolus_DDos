@@ -265,11 +265,11 @@ class HomeWrapperClass
         return $_arr;
 
     }
-    public function setPolicies($policyID,$deviceID,$policy,$loaded,$ipv6, $mac){
+    public function setPolicies($policyID,$deviceID,$policy,$loaded,$ipv6){
         $table = "policies";
 
         DB::table($table)->insert(
-            ['policyID' => $policyID, 'deviceID' => $deviceID,'policy' => $policy, 'loaded' => $loaded,'ipv6' => $ipv6,'mac'=>$mac]
+            ['policyID' => $policyID, 'deviceID' => $deviceID,'policy' => $policy, 'loaded' => $loaded,'ipv6' => $ipv6]
         );
 
     }
