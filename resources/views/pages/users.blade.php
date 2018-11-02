@@ -88,7 +88,6 @@ if(count($users) > 0){
                                         <th class='text-center'>User ID</th>
                                         <th class='text-center'>User Name</th>
                                         <th class='text-center'>User IP</th>
-                                        <th class='text-center'>Server IP</th>
                                         <th class='text-center'>Connection Start Time</th>
                                         <th class='text-center'>Connection Stop Time</th>
                                     </tr>
@@ -98,19 +97,17 @@ if(count($users) > 0){
                                     // Append Body
                                     if(count($users) > 0){
                                         for($i=0; $i<count($users);$i++){
-                                            $userUID = $users[$i]["userUID"];
+                                            $userID = $users[$i]["userID"];
                                             $username = $users[$i]["username"];
-                                            $userIP = $users[$i]["userIP"];
-                                            $serverIP = $users[$i]["serverIP"];
+                                            $userIP = $users[$i]["ipAddress"];
                                             $connectionStartTime = $users[$i]["connectionStartTime"];
                                             $connectionStopTime = $users[$i]["connectionStopTime"];
 
                                             // Create Table Row
                                             echo "<tr>";
-                                            echo "<td>".$userUID."</td>";
+                                            echo "<td>".$userID."</td>";
                                             echo "<td>".$username."</td>";
                                             echo "<td>".$userIP."</td>";
-                                            echo "<td>".$serverIP."</td>";
                                             echo "<td>".$connectionStartTime."</td>";
                                             echo "<td>".$connectionStopTime."</td>";
                                             echo "</tr>";
