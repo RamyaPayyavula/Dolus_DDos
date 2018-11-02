@@ -87,7 +87,6 @@ if(count($attackHistory) > 0){
                                         <th class="text-center">Destination IP</th>
                                         <th class="text-center">Attack Start Time</th>
                                         <th class="text-center">Attack Stop Time</th>
-                                        <th class="text-center">No Of Packets</th>
                                     </tr>
                                     </thead>
                                     <tbody id="tableBody" class="text-center">
@@ -101,7 +100,6 @@ if(count($attackHistory) > 0){
                                             $destination_IP = $attackHistory[$i]["destination_IP"];
                                             $attackStartTime = $attackHistory[$i]["attackStartTime"];
                                             $attackStopTime = $attackHistory[$i]["attackStopTime"];
-                                            $numberOfPackets = $attackHistory[$i]["numberOfPackets"];
 
                                             // Create Table Row
                                             echo "<tr>";
@@ -110,7 +108,6 @@ if(count($attackHistory) > 0){
                                             echo "<td>".$destination_IP."</td>";
                                             echo "<td>".$attackStartTime."</td>";
                                             echo "<td>".$attackStopTime."</td>";
-                                            echo "<td>".$numberOfPackets."</td>";
 
                                             echo "</tr>";
                                         }
