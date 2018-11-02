@@ -175,11 +175,11 @@ class HomeWrapperClass
         return $_arr;
 
     }
-    public function getAllPacketLogsByDevice($eth_src){
+    public function getAllPacketLogsByDevice($ip_src){
         #$db = 'test';
         $table = "packet_logs";
 
-        $data = DB::connection('mysql')->table($table)->where('eth_src', $eth_src)->get();
+        $data = DB::connection('mysql')->table($table)->where('ip_src', $ip_src)->get();
         $_arr = $this->convertStdclassArrayToArray($data);
 
         return $_arr;
