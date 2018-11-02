@@ -4,7 +4,15 @@ $servers_used_on_months = array(["Jan",0],["Feb",0],["March",0],["Apr",0],["May"
 if(count($users) > 0){
     for($i=0; $i<count($users);$i++){
         $startMon = date("m",strtotime($users[$i]["connectionStartTime"]));
+        if($users[$i]["connectionStopTime"]!=null)
+        {
         $endMon = date("m",strtotime($users[$i]["connectionStopTime"]));
+        }
+        else{
+        $current_mon = date("Y-m-d h:i:s");
+         $endMon = date("m",strtotime($current_mon));
+        }
+        
         if($startMon == $endMon  ){
             $servers_used_on_months[$startMon-1][1] =  $servers_used_on_months[$startMon-1][1]+1;
         }
@@ -40,9 +48,9 @@ if(count($users) > 0){
                 // Define the chart to be drawn.
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'Month');
-                data.addColumn('number', 'No of Servers(count)');
+                data.addColumn('number', 'No of Users(count)');
                 data.addRows(<?php echo(json_encode($servers_used_on_months)) ?>);
-                var options = {'title':'Number of Servers Used per Month by all the users in the year 2018',
+                var options = {'title':'Number of Users joined per Month in this year',
                     'orientation': 'horizontal',
                     'width':'100%',
                     'height':500};
