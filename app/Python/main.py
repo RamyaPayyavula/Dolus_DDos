@@ -20,7 +20,8 @@ records = session.query(Devices).all()
 row_count = session.query(SuspiciousnessScores).count()
 for rec in records:
     device_id = rec.deviceID
+    row_count = row_count+1
     calculateSS(row_count,trace_id,device_id)
     calculateSSByTime(row_count,trace_id, device_id)
-    row_count = row_count+1
+    
 print('executed')
