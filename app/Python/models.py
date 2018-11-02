@@ -62,9 +62,13 @@ class Policies(Base):
     __tablename__ = 'policies'
     policyID = Column('policyID', String(36), primary_key=True)
     deviceID = Column('deviceID', Integer, nullable=False)
-    policy = Column('policy', String(400), nullable=False)
-    loaded = Column('loaded',Integer, default=None)
     src_ip = Column('src_ip', String(45), default=None)
+    dst_IP = Column('dst_ip', String(45), default=None)
+    switch1 = Column('switch1', String(45), default=None)
+    switch2 = Column('switch2', String(45), default=None)
+    senderPort = Column('senderPort', Integer, default=None)
+    receiverPort = Column('receiverPort', Integer, default=None)
+    loaded = Column('loaded',Integer, default=None)
 
 
 class Qvm(Base):
