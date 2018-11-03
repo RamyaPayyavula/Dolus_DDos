@@ -9,8 +9,12 @@ timestamp = time.time()
 current_date_timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
 
 
-startTimeafter30Min = current_date_timestamp + datetime.timedelta(minutes = 30)
+startTimeafter30Min = 
 session = Session()
+
+nextTime = datetime.datetime.now() + datetime.timedelta(minutes = 90)
+
+startTimeafter30Min = datetime.datetime.strftime(nextTime, "%Y-%m-%d %H:%M:%S")
 
 
 # inserting in Devices tables
