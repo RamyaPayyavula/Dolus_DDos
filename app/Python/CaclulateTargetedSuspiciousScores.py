@@ -4,10 +4,10 @@
 #!/usr/bin/env python
 
 import sys
-from app.Python.settings import Session, engine, Base
-from app.Python.calcTargetedSSByTime import calculateTargetedSSByTime
-from app.Python.calcTargetedSS import calculateTargetedSS
-from app.Python.models import SuspiciousnessScores, devices
+from settings import Session, engine, Base
+from calcTargetedSSByTime import calculateTargetedSSByTime
+from calcTargetedSS import calculateTargetedSS
+from models import SuspiciousnessScores, devices
 
 session = Session()
 lastrecord = session.query(SuspiciousnessScores).order_by(SuspiciousnessScores.traceID.desc()).first()
