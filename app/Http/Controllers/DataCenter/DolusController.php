@@ -119,7 +119,7 @@ public function getServerDetails(Request $request)
                      $sourceIP= $device_details[0]['ipv4'];
                      $packet_details = $home_wrapper->getAllPacketLogsByDevice($sourceIP);
                      $no_of_logs=count($packet_details);
-                     $destinationIP = $packet_details[$no_of_logs-1]['eth_dst'];
+                     $destinationIP = $packet_details[$no_of_logs-1]['ip_dst'];
                      //$home_wrapper->insertIntoAttacks($attacker_id,$sourceIP,$destinationIP);
                      $all_migrations = $home_wrapper->getAllUserMigrations();
                      $userMigrationsUID ='migration'.strval(count($all_migrations));
