@@ -9,7 +9,7 @@ timestamp = time.time()
 current_date_timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
 
 
-startTimeafter30Min = date('Y-m-d H:i:s', strtotime("+30 minutes"));
+startTimeafter30Min = current_date_timestamp + datetime.timedelta(minutes = 30)
 session = Session()
 
 
