@@ -5,7 +5,7 @@ import time
 timestamp = time.time()
 current_date_timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
 
-def calculateSS(SSSID,trace_id,device_id):
+def calculateTargetedSS(SSSID,trace_id,device_id):
     db = MySQLdb.connect(user='root', passwd='root', host='127.0.0.1', db='test', cursorclass=MySQLdb.cursors.DictCursor)
     cursor = db.cursor()
     query = "INSERT INTO suspiciousness_scores SELECT "+ str(SSSID) +","+str(device_id)+","+str(trace_id)+",'"+str(current_date_timestamp)+"'   ,g.name, g.score"
