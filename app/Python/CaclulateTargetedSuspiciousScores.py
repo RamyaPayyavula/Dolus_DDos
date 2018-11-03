@@ -7,7 +7,7 @@ import sys
 from settings import Session, engine, Base
 from calcTargetedSSByTime import calculateTargetedSSByTime
 from calcTargetedSS import calculateTargetedSS
-from models import SuspiciousnessScores, devices
+from models import SuspiciousnessScores, Devices
 
 session = Session()
 lastrecord = session.query(SuspiciousnessScores).order_by(SuspiciousnessScores.traceID.desc()).first()
