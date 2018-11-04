@@ -68,10 +68,10 @@ function installStatus() {
     #Evaluate return value.
     if [[ $ret != 0 ]] ; then
         #Command did not execute properly.
-        echo -e "\t${RED}The command '$@' did not execute properly. The error was saved to /tmp/install_err.log.${NC}"
+        echo -e "\t${RED}The command '$@' did not execute properly. The error was saved to /tmp/install_err.log.${NC}" >&2
     else
         #Command executed properly.
-        echo -e "\t${GREEN}The command '$@' executed properly!${NC}"
+        echo -e "\t${GREEN}The command '$@' executed properly!${NC}" >&2
         rm -f /tmp/install_err.log
     fi
     return $ret
