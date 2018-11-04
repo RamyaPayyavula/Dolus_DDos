@@ -6,7 +6,7 @@ import sys
 from settings import Session, engine, Base
 from calcSSByTime import calculateSSByTime
 from calcSS import calculateSS
-from import SuspiciousnessScores, devices
+from import SuspiciousnessScores, Devices
 
 session = Session()
 lastrecord = session.query(SuspiciousnessScores).order_by(SuspiciousnessScores.traceID.desc()).first()
