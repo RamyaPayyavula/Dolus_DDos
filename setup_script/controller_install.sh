@@ -61,12 +61,27 @@ else
     rm -f /tmp/sw_install_err.log
 fi
 
+function installStatus() {
+    #Run command passed to installStatus()
+    "$@" > /tmp/install_err.log 2>&1 #Using this method instead of $* because $* will fail if any command arguments have spaces in them.
+    #Evaluate return value.
+    if [[ $? != 0 ]] ; then
+        #Command did not execute properly.
+        echo -e "\t${RED}The command '$@' did not execute properly. The error was saved to /tmp/install_err.log.${NC}"
+    else
+        #Command executed properly.
+        echo -e "\t${GREEN}The command '$@' executed properly!${NC}"
+        rm -f /tmp/install_err.log
+    fi
+
+}
+
 #Configure Opam
 
 echo "Configuring Opam..."
 echo "Command: opam init -y"
-sudo opam init -y
-sudo opam switch 4.06.0
-sudo opam switch
-eval `opam config env`
-sudo echo 'eval `opam config env`' >>.profile
+installStatus sudo opam init -y
+installStatus sudo opam switch 4.06.0
+installStatus sudo opam switch
+installStatus eval `opam config env`
+installStatus sudo echo 'eval `opam config env`' >> ~/.profile
