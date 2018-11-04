@@ -3,7 +3,7 @@ import MySQLdb
 import MySQLdb.cursors
 import time
 from settings import Session, engine, Base
-from import SuspiciousnessScoresByTime
+from models import SuspiciousnessScoresByTime
 
 timestamp = time.time()
 current_date_timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
