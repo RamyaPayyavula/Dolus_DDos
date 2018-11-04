@@ -11,8 +11,7 @@ current_date_timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y
 session = Session()
 
 def calculateSSByTime(trace_id, device_id):
-    db = MySQLdb.connect(user='root', passwd='root', host='127.0.0.1', db='test',
-                         cursorclass=MySQLdb.cursors.DictCursor)
+    db = MySQLdb.connect(user='root', passwd='root', host='127.0.0.1', db='test',cursorclass=MySQLdb.cursors.DictCursor)
     cursor = db.cursor()
     findMin = "SELECT MIN(frame_time) as minFrameTime, MAX(frame_time) as maxFrameTime FROM packet_logs where trace_id = " + str(trace_id) + ";"
     cursor.execute(findMin)
