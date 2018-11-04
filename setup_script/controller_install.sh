@@ -84,13 +84,13 @@ RET_ARR=()
 
 echo "Configuring Opam..."
 echo "Executing command 1"
-RET_ARR+=$(installStatus sudo opam init -y)
+RET_ARR+=($(installStatus sudo opam init -y))
 echo "Executing command 2"
-RET_ARR+=$(installStatus sudo opam switch 4.06.0)
+RET_ARR+=($(installStatus sudo opam switch 4.06.0))
 echo "Executing command 3"
-RET_ARR+=$(installStatus sudo opam switch)
+RET_ARR+=($(installStatus sudo opam switch))
 echo "Executing command 4"
-RET_ARR+=$(installStatus eval `opam config env`)
+RET_ARR+=($(installStatus eval `opam config env`))
 installStatus sudo echo 'eval `opam config env`' >> ~/.profile
 
 # echo "Got here!"
