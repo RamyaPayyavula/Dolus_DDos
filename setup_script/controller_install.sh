@@ -107,6 +107,7 @@ echo "Got here!"
 
 for i in "${RET_ARR[@]}"; do
     if [[ $i != 0 ]]; then
+        echo "i was: $i"
         echo -e "\t${RED}Opam was not configured properly. Exiting.${NC}"
         exit;
     else
