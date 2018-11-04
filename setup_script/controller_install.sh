@@ -94,3 +94,15 @@ for i in "${RET_ARR[@]}"; do
     fi
 done
 echo -e "\t${GREEN}Opam was configured properly.${NC}"
+
+#Install frenetic
+echo "Installing frenetic... (this might take a while)"
+sudo opam pin add frenetic -y https://github.com/frenetic-lang/frenetic.git > /tmp/frenetic_err.log 2>&1
+
+if [[ $? != 0 ]]; then
+    echo -e "\t${RED}Frenetic installation failed. Error was saved to /tmp/frenetic_err.log. Exiting.${NC}"
+    exit
+else
+    echo -e "\t${GREEN}Frenetic installation successful!${NC}"
+    rm -f /tmp/frenetic_err.log
+fi
