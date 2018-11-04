@@ -74,6 +74,7 @@ function installStatus() {
         echo -e "\t${GREEN}The command '$@' executed properly!${NC}" >&2
         rm -f /tmp/install_err.log
     fi
+    echo "Variable ret equals: $ret"
     return $ret
 
 }
