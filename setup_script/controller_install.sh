@@ -74,7 +74,6 @@ function installStatus() {
         echo -e "\t${GREEN}The command '$@' executed properly!${NC}" >&2
         rm -f /tmp/install_err.log
     fi
-    #echo "Variable ret equals: $ret"
     echo $ret
 }
 
@@ -93,24 +92,10 @@ echo "Executing command 4"
 RET_ARR+=($(installStatus eval `opam config env`))
 installStatus sudo echo 'eval `opam config env`' >> ~/.profile
 
-# echo "Got here!"
-# echo "RET1 is: $RET1"
-# echo "RET2 is: $RET2"
-# echo "RET3 is: $RET3"
-# echo "RET4 is: $RET4"
-# echo "RET5 is: $RET5"
-
-
-printf '%s\n' "${RET_ARR[@]}"
-
-echo "Got here!"
-
 for i in "${RET_ARR[@]}"; do
     if [[ $i != 0 ]]; then
-        echo "i was: $i"
         echo -e "\t${RED}Opam was not configured properly. Exiting.${NC}"
         exit;
-    else
-        echo -e "\t${GREEN}Opam was configured properly.${NC}"
     fi
+        echo -e "\t${GREEN}Opam was configured properly.${NC}"
 done
