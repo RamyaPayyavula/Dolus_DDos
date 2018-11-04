@@ -8,6 +8,7 @@ from import SuspiciousnessScoresByTime
 timestamp = time.time()
 current_date_timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
 
+session = Session()
 
 def calculateSSByTime(trace_id, device_id):
     db = MySQLdb.connect(user='root', passwd='root', host='127.0.0.1', db='test',
