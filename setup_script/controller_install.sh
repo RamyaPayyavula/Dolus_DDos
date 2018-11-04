@@ -75,8 +75,7 @@ function installStatus() {
         rm -f /tmp/install_err.log
     fi
     echo "Variable ret equals: $ret"
-    return $ret
-
+    echo $ret
 }
 
 #Configure Opam
