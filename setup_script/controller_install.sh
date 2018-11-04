@@ -64,8 +64,9 @@ fi
 function installStatus() {
     #Run command passed to installStatus()
     "$@" > /tmp/install_err.log 2>&1 #Using this method instead of $* because $* will fail if any command arguments have spaces in them.
+    ret=$?
     #Evaluate return value.
-    if [[ $? != 0 ]] ; then
+    if [[ $ret != 0 ]] ; then
         #Command did not execute properly.
         echo -e "\t${RED}The command '$@' did not execute properly. The error was saved to /tmp/install_err.log.${NC}"
     else
@@ -73,6 +74,7 @@ function installStatus() {
         echo -e "\t${GREEN}The command '$@' executed properly!${NC}"
         rm -f /tmp/install_err.log
     fi
+    return $ret
 
 }
 
