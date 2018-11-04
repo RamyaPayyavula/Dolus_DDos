@@ -18,14 +18,14 @@ def calculateSS(SSSID,trace_id,device_id):
     query += "+ POWER(((flows_total - flows_min) / (flows_max - flows_min)),2)"
     query += "+POWER(((bytes_total - bytes_min) / (bytes_max - bytes_min)),2))/3),(1.0/2.0)) 'score'"
     query += " from("
-    query += "SELECT d.name, SUM(l.frame_len) as 'bytes_total', case when d.name like 'server%' then 100000 else 100 end as 'bytes_min',"
+    query += "SELECT d.name, CASE WHEN SUM(frame_len)<> NULL THEN SUM(frame_len) ELSE 0 END as 'bytes_total', case when d.name like 'server%' then 100000 else 100 end as 'bytes_min',"
     query += "case when d.name like 'server%' then 100000000 else 100000 end as 'bytes_max',"
     query += "count(*) as 'flows_total',case when d.name like 'server%' then 1000 else 100 end as 'flows_min',"
     query += "case when d.name like 'server%' then 10000 else 1000 end as 'flows_max',"
     query += "COUNT(DISTINCT l.ip_dst) AS 'connections_total',case when d.name like 'server%' then 10 else 1 end as 'connections_min',"
     query += "case when d.name like 'server%' then 1000 else 10 end as 'connections_max'"
     query += "FROM packet_logs l, devices d WHERE d.deviceID ="+str(device_id)+" and d.ipv4 = l.ip_src and l.ip_src <> ' '"
-    query += "and l.ip_dst <> ' ' and trace_id = "+ str(trace_id) +" group by d.name) a	) g;"
+    query += "and l.ip_dst <> ' ' and trace_id = "+ str(trace_id) +") a	) g;"
 
     cursor.execute(query)
     db.commit()
