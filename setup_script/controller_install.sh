@@ -68,10 +68,9 @@ function installStatus() {
     #Evaluate return value.
     if [[ $ret != 0 ]] ; then
         #Command did not execute properly.
-        echo -e "\t${RED}The command '$@' did not execute properly. The error was saved to /tmp/install_err.log.${NC}" >&2
+        echo -e "\t${RED}The command "@" did not execute properly. The error was saved to /tmp/install_err.log.${NC}" >&2
     else
-        #Command executed properly.
-        echo -e "\t${GREEN}The command '$@' executed properly!${NC}" >&2
+        #Command executed properly. Remove the error log file because it is no longer necessary.
         rm -f /tmp/install_err.log
     fi
     echo $ret
@@ -82,20 +81,16 @@ function installStatus() {
 RET_ARR=()
 
 echo "Configuring Opam..."
-echo "Executing command 1"
 RET_ARR+=($(installStatus sudo opam init -y))
-echo "Executing command 2"
 RET_ARR+=($(installStatus sudo opam switch 4.06.0))
-echo "Executing command 3"
 RET_ARR+=($(installStatus sudo opam switch))
-echo "Executing command 4"
-RET_ARR+=($(installStatus eval `opam config env`))
+installStatus eval `opam config env`
 installStatus sudo echo 'eval `opam config env`' >> ~/.profile
 
 for i in "${RET_ARR[@]}"; do
     if [[ $i != 0 ]]; then
-        echo -e "\t${RED}Opam was not configured properly. Exiting.${NC}"
+        echo -e "\t${RED}Opam was not configured properly. Error was saved to /tmp/install_err.log. Exiting.${NC}"
         exit;
     fi
-        echo -e "\t${GREEN}Opam was configured properly.${NC}"
 done
+echo -e "\t${GREEN}Opam was configured properly.${NC}"
