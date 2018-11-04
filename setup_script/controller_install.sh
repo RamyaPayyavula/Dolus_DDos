@@ -95,11 +95,11 @@ echo "Executing command 5"
 RET5=$(installStatus sudo echo 'eval `opam config env`' >> ~/.profile)
 
 echo "Got here!"
-echo $RET1
-echo $RET2
-echo $RET3
-echo $RET4
-echo $RET5
+echo "RET1 is: $RET1"
+echo "RET2 is: $RET2"
+echo "RET3 is: $RET3"
+echo "RET4 is: $RET4"
+echo "RET5 is: $RET5"
 
 
 printf '%s\n' "${RET_ARR[@]}"
