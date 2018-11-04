@@ -87,13 +87,13 @@ echo "Configuring Opam..."
 echo "Executing command 1"
 RET1=$(installStatus sudo opam init -y)
 echo "Executing command 2"
-RET2+=$(installStatus sudo opam switch 4.06.0)
+RET2=$(installStatus sudo opam switch 4.06.0)
 echo "Executing command 3"
-RET3+=$(installStatus sudo opam switch)
+RET3=$(installStatus sudo opam switch)
 echo "Executing command 4"
-RET4+=$(installStatus eval `opam config env`)
+RET4=$(installStatus eval `opam config env`)
 echo "Executing command 5"
-RET5+=$(installStatus sudo echo 'eval `opam config env`' >> ~/.profile)
+RET5=$(installStatus sudo echo 'eval `opam config env`' >> ~/.profile)
 
 echo "Got here!"
 echo $RET1
