@@ -27,7 +27,7 @@ def calculateSSByTime(trace_id, device_id):
                                  cursorclass=MySQLdb.cursors.DictCursor)
             cursor = db.cursor()
             SSSID = SSSID+1;
-            query = "INSERT INTO suspiciousness_scores SELECT "+ str(SSSID)+","+ str(device_id) + "," + str(trace_id) + ",'"+str(current_date_timestamp)+"',g.name, g.score"
+            query = "INSERT INTO suspiciousness_scores_by_time SELECT "+ str(SSSID)+","+ str(device_id) + "," + str(trace_id) + ",'"+str(current_date_timestamp)+"',g.name, g.score"
             query += " FROM (SELECT a.name, a.bytes_total, a.bytes_min, a.bytes_max, a.flows_total,"
             query += "a.flows_min, a.flows_max, a.connections_total, a.connections_min, a.connections_max,"
             query += "(connections_total - connections_min) / (connections_max - connections_min)"
