@@ -49,7 +49,7 @@ fi
 
 #Install the packages required for a LAMP stack, Python, Opam, and Mininet.
 echo "Installing LAMP stack, Python, Opam, and Mininet..."
-sudo apt-get -y install apache2 python-setuptools python-dev build-essential libcurl4-openssl-dev opam curl apt dpkg mininet m4 zlib1g-dev python-pip libmysqlclient-dev apache2 php libapache2-mod-php libssl-dev > /tmp/sw_install_err.log 2>&1
+sudo apt-get -y install apache2 python-setuptools python-dev build-essential libcurl4-openssl-dev opam curl apt dpkg mininet m4 zlib1g-dev python-pip libmysqlclient-dev php libapache2-mod-php libssl-dev > /tmp/sw_install_err.log 2>&1
 
 #Check to see if the package lists were updated properly.
 if [[ $? != 0 ]] ; then
@@ -60,3 +60,12 @@ else
     echo -e "\t${GREEN}The required software was installed properly!${NC}"
     rm -f /tmp/sw_install_err.log
 fi
+
+#Configure Opam
+
+echo "Configuring Opam..."
+sudo opam init -y
+sudo opam switch 4.06.0
+sudo opam switch
+eval `opam config env`
+sudo echo 'eval `opam config env`' >>.profile
