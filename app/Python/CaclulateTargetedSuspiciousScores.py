@@ -1,11 +1,10 @@
 
 
-
 #!/usr/bin/env python
 
 import sys
 from settings import Session, engine, Base
-from calcTargetedSSByTime import calculateTargetedSSByTime
+from calcSSTargetedByTime import calculateTargetedSSByTime
 from calcTargetedSS import calculateTargetedSS
 from models import SuspiciousnessScores, Devices
 
@@ -23,6 +22,6 @@ for rec in records:
     device_id = rec.deviceID
     row_count = row_count+1
     calculateTargetedSS(row_count,trace_id,device_id)
-    calculateTargetedSSByTime(row_count,trace_id, device_id)
+    calculateTargetedSSByTime(trace_id, device_id)
     
 print('executed')
