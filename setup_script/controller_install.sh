@@ -64,6 +64,7 @@ fi
 #Configure Opam
 
 echo "Configuring Opam..."
+echo "Command: opam init -y"
 sudo opam init -y
 sudo opam switch 4.06.0
 sudo opam switch
