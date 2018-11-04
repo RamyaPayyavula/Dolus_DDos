@@ -78,10 +78,20 @@ function installStatus() {
 
 #Configure Opam
 
+RET_ARR=()
+
 echo "Configuring Opam..."
-echo "Command: opam init -y"
-installStatus sudo opam init -y
-installStatus sudo opam switch 4.06.0
-installStatus sudo opam switch
-installStatus eval `opam config env`
-installStatus sudo echo 'eval `opam config env`' >> ~/.profile
+RET_ARR+=$(installStatus sudo opam init -y)
+RET_ARR+=$(installStatus sudo opam switch 4.06.0)
+RET_ARR+=$(installStatus sudo opam switch)
+RET_ARR+=$(installStatus eval `opam config env`)
+RET_ARR+=$(installStatus sudo echo 'eval `opam config env`' >> ~/.profile)
+
+for i in "${RET_ARR[@]"; do
+    if [[ $i != 0 ]]; then
+        echo "\t${RED}Opam was not configured properly. Exiting.${NC}"
+        exit;
+    else
+        echo "\t${GREEN}Opam was configured properly.${NC}"
+    fi
+done
