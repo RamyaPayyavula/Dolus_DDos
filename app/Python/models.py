@@ -57,6 +57,18 @@ class PacketLogs(Base):
     ip_proto = Column('ip_proto', Integer, default=None)
     ip_src = Column('ip_src', String(15), default=None)
     ip_dst = Column('ip_dst', String(15), default=None)
+    
+class Logs(Base):	
+    __tablename__ = 'logs'	
+    switch_id = Column('switch_id', Integer,default=0)
+    unixtimestamp = Column('unixtimestamp',Integer, primary_key=True)		
+    port_id = Column('port_id', String(20), default=None)
+    tx_packets = Column('tx_packets', Integer, default=0)		
+    rx_packets = Column('rx_packets', Integer, default=0)	
+    tx_bytes = Column('tx_bytes', Integer, default=0)	
+    rx_bytes = Column('rx_bytes', Integer, default=0)	
+  	tx_errors = Column('tx_errors', Integer, default=0)	
+    rx_errors = Column('rx_errors', Integer, default=0)
 
 class Policies(Base):
     __tablename__ = 'policies'
