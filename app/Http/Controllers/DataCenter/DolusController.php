@@ -156,7 +156,7 @@ public function getServerDetails(Request $request)
                                  $sender = $sourceIP;
                                  $receiver = $destinationIP;
                                  $switch1 = $switch_devices_switch1[0]['switchID'];
-                                 $redirectPort = 1;
+                                 $redirectPort = $switch_devices_switch1[0]['port'];
                                  $qvm_port = 5;
                                  $switch2 = $switch_devices_switch2[0]['switchID'];
                                  //port 1 is to set to qvm
