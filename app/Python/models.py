@@ -67,7 +67,7 @@ class Logs(Base):
     rx_packets = Column('rx_packets', Integer, default=0)	
     tx_bytes = Column('tx_bytes', Integer, default=0)	
     rx_bytes = Column('rx_bytes', Integer, default=0)	
-  	tx_errors = Column('tx_errors', Integer, default=0)	
+    tx_errors = Column('tx_errors', Integer, default=0)	
     rx_errors = Column('rx_errors', Integer, default=0)
 
 class Policies(Base):
