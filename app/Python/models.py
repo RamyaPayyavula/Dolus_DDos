@@ -60,8 +60,8 @@ class PacketLogs(Base):
     
 class Logs(Base):	
     __tablename__ = 'logs'	
-    switch_id = Column('switch_id', Integer,default=0)
-    unixtimestamp = Column('unixtimestamp',Integer, primary_key=True)		
+    switch_id = Column('switch_id', Integer,ForeignKey("switches.switchID"), nullable=False)
+    unixtimestamp = Column('unixtimestamp',Integer)		
     port_id = Column('port_id', String(20), default=None)
     tx_packets = Column('tx_packets', Integer, default=0)		
     rx_packets = Column('rx_packets', Integer, default=0)	
