@@ -160,13 +160,12 @@ public function getServerDetails(Request $request)
                                  $qvm_port = 5;
                                  $switch2 = $switch_devices_switch2[0]['switchID'];
                                  //port 1 is to set to qvm
-                                 $policy = "Filter(SwitchEq(".strval($switch2).") & IP4DstEq(".strval($receiver).") & IP4SrcEq(".strval($sender) .")) >> SetPort(".strval($redirectPort).")| Filter(SwitchEq(".strval($switch1) .") & IP4DstEq(".strval($sender) .") & IP4SrcEq(". strval($receiver) .")) >> SetPort(".strval($qvm_port).")";
                                  $no_of_policies = count($home_wrapper->getAllPolicies());
                                  $policyID = 'Policy'.strval($no_of_policies+1);
                                  $deviceID = $device_id;
                                  $loaded = 1;
-                                 $ipv6 = $device_details[0]['ipv6'];
-                                 $home_wrapper->setPolicies($policyID,$deviceID,$policy,$loaded,$ipv6);
+                                 $home_wrapper->setPolicies($policyID,$deviceID,$sourceIP,$destinationIP,$switch1,$switch2,$redirectPort,$qvm_port,$loaded);
+
                              }
 
                          }
