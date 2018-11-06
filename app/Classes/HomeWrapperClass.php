@@ -185,6 +185,13 @@ class HomeWrapperClass
         return $_arr;
 
     }
+    public function getLogsBySwitch($switch_id){
+      $table = "logs";
+        $data = DB::connection('mysql')->table($table)->where('switch_id', $switch_id)->get();
+        $_arr = $this->convertStdclassArrayToArray($data);
+        return $_arr;
+    }
+
     public function getAllSwitches(){
         #$db = 'test';
         $table = "switches";
