@@ -60,7 +60,7 @@ class PacketLogs(Base):
     
 class Logs(Base):	
     __tablename__ = 'logs'	
-    log_id = Column('log_id',BigInteger,Primary_key=True)
+    log_id = Column('log_id',BigInteger,primary_key=True)
     switch_id = Column('switch_id', BigInteger,nullable=False)
     unixtimestamp = Column('unixtimestamp',String(50))		
     port_id = Column('port_id', String(20), default=None)
