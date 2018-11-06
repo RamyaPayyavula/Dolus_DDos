@@ -185,6 +185,16 @@ class HomeWrapperClass
         return $_arr;
 
     }
+    
+    
+    public function getDistinctDestinationsOfDevice($ip_src){
+        #$db = 'test';
+        $table = "packet_logs";
+        $data = DB::connection('mysql')->table($table)->select(DB::raw('DISTINCT(ip_dst) as ip_dst,switch_id, ip_src'))->where('ip_src', $ip_src)->get();
+        $_arr = $this->convertStdclassArrayToArray($data);
+        return $_arr;
+    }
+    
     public function getLogsBySwitch($switch_id){
       $table = "logs";
         $data = DB::connection('mysql')->table($table)->where('switch_id', $switch_id)->get();
