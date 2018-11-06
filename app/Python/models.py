@@ -60,16 +60,18 @@ class PacketLogs(Base):
     
 class Logs(Base):	
     __tablename__ = 'logs'	
-    log_id = Column('log_id',Inetegre,Primary_key=True)
+    log_id = Column('log_id',BigInteger,Primary_key=True)
     switch_id = Column('switch_id', BigInteger,nullable=False)
     unixtimestamp = Column('unixtimestamp',String(50))		
     port_id = Column('port_id', String(20), default=None)
-    tx_packets = Column('tx_packets', Integer, default=0)		
+    tx_packets = Column('tx_packets', BigInteger, default=0)		
     rx_packets = Column('rx_packets', Integer, default=0)	
-    tx_bytes = Column('tx_bytes', Integer, default=0)	
-    rx_bytes = Column('rx_bytes', Integer, default=0)	
-    tx_errors = Column('tx_errors', Integer, default=0)	
-    rx_errors = Column('rx_errors', Integer, default=0)
+    total_packets = Column('total_packets',BigInteger, default=0)
+    tx_bytes = Column('tx_bytes', BigInteger, default=0)	
+    rx_bytes = Column('rx_bytes', BigInteger, default=0)	
+    total_bytes = Column('total_bytes',BigInteger,default=0)
+    tx_errors = Column('tx_errors', BigInteger, default=0)	
+    rx_errors = Column('rx_errors', BigInteger, default=0)
 
 class Policies(Base):
     __tablename__ = 'policies'
