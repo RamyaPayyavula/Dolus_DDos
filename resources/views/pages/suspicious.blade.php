@@ -305,7 +305,7 @@ $suspicious_on_months = array(["Jan",0],["Feb",0],["March",0],["Apr",0],["May",0
                                     <tbody class="text-center">
                                     <?php
                                     $home_wrapper= new HomeWrapperClass();
-                                    $distinctIPdeviceConnec = $home_wrapper->getAllPacketLogsByDevice($distinctIPDevice);
+                                    $distinctIPdeviceConnec = $home_wrapper->getDistinctDestinationsOfDevice($distinctIPDevice);
                                     if(count($distinctIPdeviceConnec) > 0){
                                         for($i=0; $i<count($distinctIPdeviceConnec);$i++){
                                             $switchID = $distinctIPdeviceConnec[$i]["switch_id"];
