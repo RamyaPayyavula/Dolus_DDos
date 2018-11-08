@@ -68,7 +68,7 @@ function installStatus() {
     #Evaluate return value.
     if [[ $ret != 0 ]] ; then
         #Command did not execute properly.
-        echo -e "\t${RED}The command "@" did not execute properly. The error was saved to /tmp/install_err.log.${NC}" >&2
+        echo -e "\t${RED}The command "@" did not execute properly. The error was saved to /tmp/install_err.log.${NC}"
     else
         #Command executed properly. Remove the error log file because it is no longer necessary.
         rm -f /tmp/install_err.log
@@ -95,14 +95,69 @@ for i in "${RET_ARR[@]}"; do
 done
 echo -e "\t${GREEN}Opam was configured properly.${NC}"
 
+R_ARR=()
+
 #Install frenetic
 echo "Installing frenetic... (this might take a while)"
-sudo opam pin add frenetic -y https://github.com/frenetic-lang/frenetic.git > /tmp/frenetic_err.log 2>&1
 
-if [[ $? != 0 ]]; then
-    echo -e "\t${RED}Frenetic installation failed. Error was saved to /tmp/frenetic_err.log. Exiting.${NC}"
-    exit
-else
-    echo -e "\t${GREEN}Frenetic installation successful!${NC}"
-    rm -f /tmp/frenetic_err.log
-fi
+#Clear error file if exists.
+> /tmp/frenetic_err.log
+
+sudo opam pin add frenetic -y https://github.com/frenetic-lang/frenetic.git >> /tmp/frenetic_err.log 2>&1
+
+#Save return values of commands run.
+R_ARR+=($?)
+
+pip install pycurl frenetic mysql >> /tmp/frenetic_err.log 2>&1
+
+R_ARR+=($?)
+
+sudo opam install frenetic >> /tmp/frenetic_err.log 2>&1
+
+R_ARR+=($?)
+
+# `pip install asdfasdf || \
+#  opam install`
+
+for i in "${R_ARR[@]}"; do
+    if [[ $i != 0 ]]; then
+        echo -e "\t${RED}Frenetic installation failed. Error was saved to /tmp/frenetic_err.log. Exiting.${NC}"
+        exit
+    fi
+done
+echo -e "\t${GREEN}Frenetic installation successful!${NC}"
+rm -f /tmp/frenetic_err.log
+
+#Create MySQL database
+
+sudo apt-get -y install debconf-utils
+
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password password'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password password'
+sudo apt-get -y install mysql-server
+
+sudo apt-get -y install mysql-server apache2 php libapache2-mod-php php-mysql php-curl
+cd /etc/mysql/mysql.conf.d 
+sudo sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/g" mysqld.cnf
+
+#Configure MySQL database
+mysql -u root -ppassword << DB_SCRIPT
+CREATE DATABASE lab2db;
+CREATE USER 'monty'@'%' IDENTIFIED BY 'some_pass'; 
+GRANT ALL PRIVILEGES ON *.* TO 'monty'@'%';
+DB_SCRIPT
+
+echo "Configuring MySQL"
+
+sudo ufw allow 3306
+
+sudo service mysql restart
+
+sudo apt-get -y install dnsutils
+
+publicIpAddr=$(dig +short myip.opendns.com @resolver1.opendns.com)
+
+echo "The configuration for the controller has been completed!"
+echo "To log in to the database on any of the switches, use:"
+echo "${LIGHTBLUE}mysql -u monty -h $publicIpAddr${NC} -p"
+echo "and enter the password ${LIGHTGREEN}some_pass${NC}"
