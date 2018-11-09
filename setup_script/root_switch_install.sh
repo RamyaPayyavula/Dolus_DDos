@@ -40,7 +40,8 @@ else
     mysql_root_pw="$1"
 fi
 
-#Check if IP address is passed as a parameter. 
+#This function tests to see if an IP address is valid or not.
+#Taken from https://www.linuxjournal.com/content/validating-ip-address-bash-script
 function valid_ip()
 {
     local  ip=$1
@@ -57,13 +58,14 @@ function valid_ip()
     fi
     return $stat
 }
-if [ $(valid_ip $1) -eq 0 ] ; then
+
+#Check if IP address is passed as a parameter. 
+if ! valid_ip $1 ; then
     echo "${RED}You entered an invalid IP address. Please enter a valid IP address.${NC}"
     exit
 else
     ipAddress="$1"
 fi
-
 
 #Update the package lists on the root switch.
 echo "Updating the package lists on the root switch."
