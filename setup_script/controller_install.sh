@@ -50,7 +50,7 @@ echo -e "${GREEN}The required software was installed properly!${NC}"
 
 #Configure Opam
 
-echo -e "${BLUE}Configuring Opam...${NC}"
+echo -e "${BLUE}\nConfiguring Opam...${NC}"
 sudo opam init -y || checkErr "Opam configuration"
 sudo opam switch 4.06.0 || checkErr "Opam configuration"
 sudo opam switch || checkErr "Opam configuration"
@@ -60,7 +60,7 @@ sudo echo 'eval `opam config env`' >> ~/.profile || checkErr "Opam configuration
 echo -e "${GREEN}Opam was configured properly.${NC}"
 
 #Install frenetic
-echo -e "${BLUE}Installing frenetic... (this might take a while)${NC}"
+echo -e "${BLUE}\nInstalling frenetic... (this might take a while)${NC}"
 
 sudo opam pin add frenetic -y https://github.com/frenetic-lang/frenetic.git || checkErr "Frenetic installation"
 pip install pycurl frenetic mysql|| checkErr "Frenetic installation"
@@ -70,7 +70,7 @@ echo -e "${GREEN}Frenetic installation successful!${NC}"
 
 #Create MySQL database
 
-echo -e "${BLUE}Installing MySQL database...${NC}"
+echo -e "${BLUE}\nInstalling MySQL database...${NC}"
 
 sudo apt-get -y install debconf-utils || checkErr "Debconf Utils Installation"
 
@@ -80,10 +80,10 @@ sudo apt-get -y install mysql-server || checkErr "MySQL installation"
 
 sudo apt-get -y install mysql-server apache2 php libapache2-mod-php php-mysql php-curl || checkErr "MySQL installation"
 
-echo -e "${GREEN}MySQL installation complete!"
+echo -e "${GREEN}MySQL installation complete!${NC}"
 
 #Configure MySQL database
-echo -e "${BLUE}Configuring MySQL database${NC}"
+echo -e "${BLUE}\nConfiguring MySQL database${NC}"
 
 cd /etc/mysql/mysql.conf.d 
 sudo sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/g" mysqld.cnf
@@ -98,7 +98,7 @@ sudo ufw allow 3306 || checkErr "MySQL configuration"
 
 sudo service mysql restart || checkErr "MySQL configuration"
 
-echo -e "${GREEN}MySQL configuration complete!"
+echo -e "${GREEN}MySQL configuration complete!${NC}"
 
 echo -e "${BLUE}\nInstalling DNSUtils package to obtain the controller's public IP address...${NC}"
 
