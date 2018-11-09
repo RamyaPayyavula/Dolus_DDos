@@ -18,9 +18,10 @@ NC='\033[0m' # No Color
 echo -e ${LIGHTBLUE}"#################################################################"
 echo "# DDoS Lab 2 Root Switch Installation and Configuration Script  #"
 echo "#                                                               #"
-echo -e "# ${LIGHTGREEN}Syntax: sudo ./root_switch_install.sh                   ${LIGHTBLUE}      #"
+echo -e "# ${LIGHTGREEN}Syntax: sudo ./root_switch_install.sh controller_ip${LIGHTBLUE}      #"
 echo "#                                                               #"
-echo "# This script will install all of the required software         #"
+echo "# This script will take in the IP address of the controller as  #"
+echo "# an argument. It will install all of the required software     #"
 echo "# packages for the root switch, and ensure that it              #"
 echo "# is configured properly.                                       #"
 echo -e "#################################################################"${NC}
@@ -61,7 +62,7 @@ function valid_ip()
 
 #Check if IP address is passed as a parameter. 
 if ! valid_ip $1 ; then
-    echo "${RED}You entered an invalid IP address. Please enter a valid IP address.${NC}"
+    echo "${RED}You entered an invalid IP address. Please enter a valid IP address as the first parameter. Exiting.${NC}"
     exit
 else
     ipAddress="$1"
