@@ -2,7 +2,7 @@
 
 #Written by Andrew Krall, 11-08-2018
 
-#This script will perform the configuration of the root switch for the DDoS Lab 2.
+#This script will perform the configuration of the slave switch for the DDoS Lab 2.
 
 #Color declarations
 RED='\033[0;31m'
@@ -12,19 +12,17 @@ LIGHTBLUE='\033[1;34m'
 LIGHTGREEN='\033[1;32m'
 NC='\033[0m' # No Color
 
-#Send the IP address of the controller as a parameter.
-
 #Ignore the weird spacing. I promise it looks good when it's echoed out to the screen.
-echo -e ${LIGHTBLUE}"#################################################################"
-echo "# DDoS Lab 2 Root Switch Installation and Configuration Script  #"
-echo "#                                                               #"
-echo -e "# ${LIGHTGREEN}Syntax: sudo ./root_switch_install.sh controller_ip${LIGHTBLUE}           #"
-echo "#                                                               #"
-echo "# This script will take in the IP address of the controller as  #"
-echo "# an argument. It will install all of the required software     #"
-echo "# packages for the root switch, and ensure that it              #"
-echo "# is configured properly.                                       #"
-echo -e "#################################################################"${NC}
+echo -e ${LIGHTBLUE}"##################################################################"
+echo "# DDoS Lab 2 Slave Switch Installation and Configuration Script  #"
+echo "#                                                                #"
+echo -e "# ${LIGHTGREEN}Syntax: sudo ./root_switch_install.sh controller_ip${LIGHTBLUE}            #"
+echo "#                                                                #"
+echo "# This script will take in the IP address of the controller as   #"
+echo "# an argument. It will install all of the required software      #"
+echo "# packages for the root switch, and ensure that it               #"
+echo "# is configured properly.                                        #"
+echo -e "##################################################################"${NC}
 echo "" #Acts as a newline by outputting nothing.
 
 #Check to see if the script is run as root/sudo. If not, warn the user and exit.
@@ -66,8 +64,8 @@ else
     ipAddress="$1"
 fi
 
-#Update the package lists on the root switch.
-echo -e "${BLUE}Updating the package lists on the root switch.${NC}"
+#Update the package lists on the slave switch.
+echo -e "${BLUE}Updating the package lists on the slave switch.${NC}"
 sudo apt-get update
 
 #Check to see if the package lists were updated properly.
@@ -94,23 +92,28 @@ function checkErr() {
     echo -e "${RED}$1 failed. Exiting.${NC}" >&2; exit;
 }
 
-#Configure the network bridge on the root switch.
-echo -e "${BLUE}\nConfiguring the network bridge on the root switch.${NC}"
+#Configure the network bridge on the slave switch.
+echo -e "${BLUE}\nConfiguring the network bridge on the slave switch.${NC}"
 #Create the bridge b0.
 sudo ovs-vsctl add-br br0 || checkErr "Networking configuration"
-#Activate the network interfaces connected to the root switch, and add the network interface ports to b0.
+#Activate the network interfaces connected to the slave switch, and add the network interface ports to b0.
 sudo ifconfig eth1 0 || checkErr "Networking configuration"
 sudo ifconfig eth2 0 || checkErr "Networking configuration"
 sudo ifconfig eth3 0 || checkErr "Networking configuration"
+sudo ifconfig eth4 0 || checkErr "Networking configuration"
+sudo ifconfig eth5 0 || checkErr "Networking configuration"
+sudo ifconfig eth6 0 || checkErr "Networking configuration"
 sudo ovs-vsctl add-port br0 eth1 || checkErr "Networking configuration"
 sudo ovs-vsctl add-port br0 eth2 || checkErr "Networking configuration"
 sudo ovs-vsctl add-port br0 eth3 || checkErr "Networking configuration"
-
-#Configure the controller on bridge b0 for the root switch.
+sudo ovs-vsctl add-port br0 eth4 || checkErr "Networking configuration"
+sudo ovs-vsctl add-port br0 eth5 || checkErr "Networking configuration"
+sudo ovs-vsctl add-port br0 eth6 || checkErr "Networking configuration"
+#Configure the controller on bridge b0 for the slave switch
 sudo ovs-vsctl set-controller br0 tcp:$ipAddress:6633 || checkErr "Networking configuration"
 
 echo -e "${GREEN}Network bridge configuration successful!${NC}"
 
-echo -e "${GREEN}Configuration of the root switch has been completed. Please go back to the controller"
+echo -e "${GREEN}Configuration of the slave switch has been completed. Please go back to the controller"
 echo "and take note of the DPID number displayed on the switch. It should be a 14-digit"
-echo -e "number that will be used to identify the root switch later.${NC}"
+echo -e "number that will be used to identify the slave switch later.${NC}"
