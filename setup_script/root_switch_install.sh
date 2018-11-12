@@ -111,6 +111,6 @@ sudo ovs-vsctl set-controller br0 tcp:$ipAddress:6633 || checkErr "Networking co
 
 echo -e "${GREEN}Network bridge configuration successful!${NC}"
 
-echo -e "${GREEN}Configuration of the root switch has been completed. Please go back to the controller"
+echo -e "\n${GREEN}Configuration of the root switch has been completed. Please go back to the controller"
 echo "and take note of the DPID number displayed on the switch. It should be a 14-digit"
 echo -e "number that will be used to identify the root switch later.${NC}"

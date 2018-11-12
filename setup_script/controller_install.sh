@@ -74,8 +74,8 @@ echo -e "${BLUE}\nInstalling MySQL database...${NC}"
 
 sudo apt-get -y install debconf-utils || checkErr "Debconf Utils Installation"
 
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password password' || checkErr "Debconf configuration"
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password password' || checkErr "Debconf configuration"
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root' || checkErr "Debconf configuration"
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root' || checkErr "Debconf configuration"
 sudo apt-get -y install mysql-server || checkErr "MySQL installation"
 
 sudo apt-get -y install mysql-server apache2 php libapache2-mod-php php-mysql php-curl || checkErr "MySQL installation"
@@ -88,8 +88,8 @@ echo -e "${BLUE}\nConfiguring MySQL database${NC}"
 cd /etc/mysql/mysql.conf.d 
 sudo sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/g" mysqld.cnf
 
-mysql -u root -ppassword << DB_SCRIPT
-CREATE DATABASE lab2db;
+mysql -u root -proot << DB_SCRIPT
+CREATE DATABASE test;
 CREATE USER 'monty'@'%' IDENTIFIED BY 'some_pass'; 
 GRANT ALL PRIVILEGES ON *.* TO 'monty'@'%';
 DB_SCRIPT

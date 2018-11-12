@@ -112,7 +112,7 @@ sudo ovs-vsctl add-port br0 eth6 || checkErr "Networking configuration"
 #Configure the controller on bridge b0 for the slave switch
 sudo ovs-vsctl set-controller br0 tcp:$ipAddress:6633 || checkErr "Networking configuration"
 
-echo -e "${GREEN}Network bridge configuration successful!${NC}"
+echo -e "\n${GREEN}Network bridge configuration successful!${NC}"
 
 echo -e "${GREEN}Configuration of the slave switch has been completed. Please go back to the controller"
 echo "and take note of the DPID number displayed on the switch. It should be a 14-digit"
