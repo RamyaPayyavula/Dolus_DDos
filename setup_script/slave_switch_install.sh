@@ -56,6 +56,10 @@ function valid_ip()
     return $stat
 }
 
+function checkErr() {
+    echo -e "${RED}$1 failed. Exiting.${NC}" >&2; exit;
+}
+
 #Check if IP address is passed as a parameter. 
 if ! valid_ip $1 ; then
     echo -e "${RED}You entered an invalid IP address. Please enter a valid IP address as the first parameter. Exiting.${NC}"
@@ -76,27 +80,26 @@ else
     echo -e "${GREEN}Packages updated properly!${NC}"
 fi
 
-#Set Wireshark to not prompt user to choose if a non-root user should capture packets or not during installation.
-echo -e "\n${BLUE}Configuring Wireshark preinstallation...${NC}"
+#Set Wireshark to not prompt user to choose if a non-root user should capture packets or not during installation, and
+# install Tshark to capture the OpenFlow packets.
+echo -e "\n${BLUE}Configuring Tshark preinstallation and installing Tshark...${NC}"
+sudo apt-get -y install debconf-utils
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y install tshark
 echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
 sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common || checkErr "Wireshark preinstallation configuration"
+echo -e "${GREEN}Tshark was installed properly!${NC}"
 
-#Install Tshark to capture the OpenFlow packets.
-echo -e "${BLUE}\nInstalling Tshark to capture the OpenFlow packets.${NC}"
+#Install openvswitch-switch
+echo -e "${BLUE}\nInstalling openvswitch...${NC}"
 sudo apt-get install -y openvswitch-switch tshark
 
 #Check to see if Tshark was installed properly.
 if [[ $? != 0 ]] ; then
-    echo -e "${RED}Tshark was not installed properly. Exiting.${NC}"
+    echo -e "${RED}The package openvswitch was not installed properly. Exiting.${NC}"
     exit
 else
-    echo -e "${GREEN}Tshark was installed properly!${NC}"
+    echo -e "${GREEN}The package openvswitch was installed successfully!"
 fi
-
-function checkErr() {
-    echo -e "${RED}$1 failed. Exiting.${NC}" >&2; exit;
-}
 
 #Configure the network bridge on the slave switch.
 echo -e "${BLUE}\nConfiguring the network bridge on the slave switch.${NC}"
