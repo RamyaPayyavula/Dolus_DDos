@@ -75,12 +75,6 @@ echo -e "${BLUE}Updating the package lists on the root switch.${NC}"
 sudo apt-get update || checkErr "Package list update"
 echo -e "${GREEN}Package lists updated successfully!"
 
-#Set Wireshark to not prompt user to choose if a non-root user should capture packets or not during installation.
-echo -e "\n${BLUE}Configuring Wireshark preinstallation...${NC}"
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wireshark
-echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
-sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common || checkErr "Wireshark preinstallation configuration"
-
 #Check to see if the package lists were updated properly.
 if [[ $? != 0 ]] ; then
     echo -e "${RED}The package lists were not installed properly. Exiting.${NC}"
@@ -88,6 +82,12 @@ if [[ $? != 0 ]] ; then
 else
     echo -e "${GREEN}Packages updated properly!${NC}"
 fi
+
+#Set Wireshark to not prompt user to choose if a non-root user should capture packets or not during installation.
+echo -e "\n${BLUE}Configuring Wireshark preinstallation...${NC}"
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wireshark
+echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
+sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common || checkErr "Wireshark preinstallation configuration"
 
 #Install Tshark to capture the OpenFlow packets.
 echo -e "${BLUE}\nInstalling Tshark to capture the OpenFlow packets.${NC}"
