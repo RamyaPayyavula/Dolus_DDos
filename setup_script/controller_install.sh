@@ -113,7 +113,7 @@ fi
 
 echo -e "${GREEN}The controller's public IP address was obtained successfully!${NC}"
 
-echo "The configuration for the controller has been completed!"
+echo -e "${GREEN}\nThe configuration for the controller has been completed!"
 echo "To log in to the database on any of the switches, use:"
-echo "${LIGHTBLUE}mysql -u monty -h $publicIpAddr${NC} -p"
-echo "and enter the password ${LIGHTGREEN}some_pass${NC}"
+echo -e "${LIGHTBLUE}mysql -u monty -h $publicIpAddr${NC} -p"
+echo -e "and enter the password ${LIGHTGREEN}some_pass${NC}"
