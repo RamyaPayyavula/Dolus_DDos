@@ -78,7 +78,7 @@ fi
 
 #Set Wireshark to not prompt user to choose if a non-root user should capture packets or not during installation.
 echo -e "\n${BLUE}Configuring Wireshark preinstallation...${NC}"
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wireshark
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y install tshark
 echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
 sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common || checkErr "Wireshark preinstallation configuration"
 
