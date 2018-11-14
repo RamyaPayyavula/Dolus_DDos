@@ -119,6 +119,6 @@ sudo ovs-vsctl add-port br0 eth3
 #Configure the controller on bridge b0 for the root switch.
 sudo ovs-vsctl set-controller br0 tcp:$ipAddress:6633 || checkErr "Networking configuration"
 
-echo -e "${GREEN}Network bridge configuration successful!${NC}"
+echo -e "\n${GREEN}Network bridge configuration successful!${NC}"
 
 echo -e "\n${GREEN}Configuration of the root switch has been completed. Please go back to the controller and take note of the DPID number displayed on the switch. It should be a 14-digit number that will be used to identify the root switch later.${NC}"
