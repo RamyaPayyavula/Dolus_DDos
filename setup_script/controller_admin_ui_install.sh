@@ -28,6 +28,12 @@ function checkErr() {
     echo -e "${RED}$1 failed. Exiting.${NC}" >&2; exit;
 }
 
+#Check to see if the script is run as root/sudo. If not, warn the user and exit.
+if [[ $EUID -ne 0 ]] ; then
+    echo -e "${RED}This script needs to be run as root. Please run this script again as root. Exiting.${NC}"
+    exit
+fi
+
 #First, set the apache default site to point to /var/www/public_html and restart the apache2 server.
 echo -e "${BLUE}Configuring the Apache server...${NC}"
 cd /etc/apache2/sites-enabled
@@ -43,6 +49,7 @@ sudo rm index.html
 sudo echo "<?php echo phpinfo(); ?>" > index.php
 cd
 sudo apt-get -y install composer || checkErr "The installation of composer"
+cd /var/www/public_html
 sudo git clone https://github.com/RamyaPayyavula/Dolus_DDos || checkErr "Attempting to clone the git repository"
 cd Dolus_DDos
 sudo chmod -R 777 /var/www/
@@ -50,7 +57,7 @@ sudo chmod -R 774 /var/www/public_html/Dolus_DDos
 echo -e "${GREEN}Composer installation and repository cloning complete!${NC}"
 
 echo -e "\n${BLUE}Installing and configuring PHP...${NC}"
-sudo apt-get install php-mbstring php-xml || checkErr "PHP dependency installation"
+sudo apt-get -y install php-mbstring php-xml || checkErr "PHP dependency installation"
 composer update || checkErr "Composer update"
 composer dump-autoload || checkErr "Composer dump-autoload"
 sudo apt-get install php7.0-zip || checkErr "PHP installation"
