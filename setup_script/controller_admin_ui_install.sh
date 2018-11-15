@@ -60,7 +60,7 @@ echo -e "\n${BLUE}Installing and configuring PHP...${NC}"
 sudo apt-get -y install php-mbstring php-xml || checkErr "PHP dependency installation"
 composer update || checkErr "Composer update"
 composer dump-autoload || checkErr "Composer dump-autoload"
-sudo apt-get install php7.0-zip || checkErr "PHP installation"
+sudo apt-get -y install php7.0-zip || checkErr "PHP installation"
 composer global require "laravel/installer"
 sudo a2enmod rewrite
 cd /etc/apache2/sites-enabled
