@@ -37,7 +37,7 @@ class Login(Base):
     __tablename__ = 'login'
     username = Column('username', String(255), primary_key=True, nullable=False)
     password = Column('password', String(255), nullable=False)
-    remember_token = Column('remember_token', Integer, nullable=True)
+    remember_token = Column('remember_token', String(100), nullable=True)
     created_at = Column('created_at', DateTime, nullable=True)
     updated_at = Column('updated_at', DateTime, nullable=True)
 
