@@ -24,7 +24,6 @@ Route::get("/switchdevices" , 'DataCenter\DolusController@getSwitchAndDevices')-
 Route::get("/policies" , 'DataCenter\DolusController@getPolicies')->name('pages.policies');
 Route::get("/suspicious" , 'DataCenter\DolusController@getSuspiciousness')->name('pages.suspicious');
 
-Route::get("/about" , 'DataCenter\DolusController@pythonScripts')->name('pages.about');
 
 
 
