@@ -8,8 +8,6 @@ from models import Devices, Users,Qvm, Servers, SwitchDevices, Switches
 timestamp = time.time()
 current_date_timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
 
-
-startTimeafter30Min = 
 session = Session()
 
 nextTime = datetime.datetime.now() + datetime.timedelta(minutes = 90)
