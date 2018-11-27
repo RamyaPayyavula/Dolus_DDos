@@ -112,9 +112,11 @@ sudo ovs-vsctl add-br br0
 sudo ifconfig eth1 0
 sudo ifconfig eth2 0
 sudo ifconfig eth3 0
+sudo ifconfig eth4 0
 sudo ovs-vsctl add-port br0 eth1
 sudo ovs-vsctl add-port br0 eth2
 sudo ovs-vsctl add-port br0 eth3
+sudo ovs-vsctl add-port br0 eth4
 
 #Configure the controller on bridge b0 for the root switch.
 sudo ovs-vsctl set-controller br0 tcp:$ipAddress:6633 || checkErr "Networking configuration"
