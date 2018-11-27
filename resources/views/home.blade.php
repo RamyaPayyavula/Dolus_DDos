@@ -13,10 +13,25 @@ if(count($rootswitch_logs)>0)
 	
 	for($i=0;$i<count($rootswitch_logs);$i++)
 	{
-		$root_switchdata[$i][0] = strval($rootswitch_logs[$i]['unixtimestamp']);
-		$root_switchdata[$i][1] = ($rootswitch_logs[$i]['tx_bytes'] + $rootswitch_logs[$i]['rx_bytes'])*8;
-		$totalnetwork_bandwidth[$i][0] = strval($rootswitch_logs[$i]['unixtimestamp']);
-		$totalnetwork_bandwidth[$i][1] = ($rootswitch_logs[$i]['total_bytes'])*8;
+		if(array_search($rootswitch_logs[$i]['unixtimestamp'], array_column($root_switchdata, '0')) !== False)
+		{
+			for($j =0; $j<count($root_switchdata);$j++){
+				if(strval($rootswitch_logs[$i]['unixtimestamp']) == $root_switchdata[$j][0]){
+					$root_switchdata[$j][1] = $root_switchdata[$j][1] + ($rootswitch_logs[$i]['tx_bytes'] + $rootswitch_logs[$i]['rx_bytes'])*8;
+					$totalnetwork_bandwidth[$j][1] = $totalnetwork_bandwidth[$j][1]+($rootswitch_logs[$i]['tx_bytes'] + $rootswitch_logs[$i]['rx_bytes'])*8;
+
+				}
+			}
+		}     
+		else{
+			$k= count($root_switchdata);
+			$root_switchdata[$k][0] = strval($rootswitch_logs[$i]['unixtimestamp']);
+			$root_switchdata[$k][1] = ($rootswitch_logs[$i]['tx_bytes'] + $rootswitch_logs[$i]['rx_bytes'])*8;
+			$totalnetwork_bandwidth[$k][0] = strval($rootswitch_logs[$i]['unixtimestamp']);
+			$totalnetwork_bandwidth[$k][1] = ($rootswitch_logs[$i]['total_bytes'])*8;
+		}
+		
+	    
 	}
 }
 
@@ -26,15 +41,32 @@ if(count($slaveswitch_logs)>0)
 
 	for($i=0;$i<count($slaveswitch_logs);$i++)
 	{
-		$slave_switchdata[$i][0] = strval($slaveswitch_logs[$i]['unixtimestamp']);
-		$slave_switchdata[$i][1] = ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
-		if($totalnetwork_bandwidth[$i][1])
+		
+		if(array_search($slaveswitch_logs[$i]['unixtimestamp'], array_column($slave_switchdata, '0')) !== False)
 		{
-	    $totalnetwork_bandwidth[$i][1] = ($totalnetwork_bandwidth[$i][1])+($slaveswitch_logs[$i]['total_bytes'])*8;
+			for($j =0; $j<count($slave_switchdata);$j++){
+				if(strval($slaveswitch_logs[$i]['unixtimestamp']) == $slave_switchdata[$j][0]){
+					$slave_switchdata[$j][1] = $slave_switchdata[$j][1]+($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
+				}
+			}
+		}     
+		else{
+			$k= count($slave_switchdata);
+			$slave_switchdata[$k][0] = strval($slaveswitch_logs[$i]['unixtimestamp']);
+			$slave_switchdata[$k][1] = ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
 		}
-		else
-		{
-			$totalnetwork_bandwidth[$i][1] = ($slaveswitch_logs[$i]['total_bytes'])*8;
+			
+		if(array_search($slaveswitch_logs[$i]['unixtimestamp'], array_column($totalnetwork_bandwidth, '0')) !== False){
+			for($j=0; $j<count($totalnetwork_bandwidth);$j++){
+				if(strval($slaveswitch_logs[$i]['unixtimestamp']) == $totalnetwork_bandwidth[$j][0]){
+					$totalnetwork_bandwidth[$j][1] = $totalnetwork_bandwidth[$j][1] + ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
+				}
+			}   
+		}
+		else{
+			$m= count($root_switchdata);
+			$totalnetwork_bandwidth[$m][1] = ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
+			$totalnetwork_bandwidth[$m][0] = strval($slaveswitch_logs[$i]['unixtimestamp']);
 		}
 	}
 }
@@ -59,8 +91,8 @@ if(count($slaveswitch_logs)>0)
             google.charts.load('current', {packages: ['corechart']});
             google.charts.setOnLoadCallback(drawChart);
             function drawChart() {
-                / Define the chart to be drawn.
-				var today = date("F j, Y");
+                // Define the chart to be drawn.
+				var today = <?php echo(json_encode(date("F j, Y"))); ?>
 				var data1 = new google.visualization.DataTable();
                 data1.addColumn('string', 'Date - Time');
                 data1.addColumn('number', 'Bandwidth Utilization');
