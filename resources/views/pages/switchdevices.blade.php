@@ -5,10 +5,19 @@ $switchdevices = $info['switchdevices'];
 $switch_to_device = array();
 if(count($switchdevices)>0){
     for($i=0;$i<count($switchdevices);$i++){
-        $switch_to_device[$i][0]=$switchdevices[$i]["switchID"];
-        $switch_to_device[$i][1]=$switchdevices[$i]["deviceID"];
+        if(array_search($switchdevices[$i]["switchID"], array_column($switch_to_device, '0')) !== False){
+			for($j =0; $j<count($switch_to_device);$j++){
+				if(strval($switchdevices[$i]["switchID"]) == $switch_to_device[$j][0]){
+					$switch_to_device[$j][1] = $switch_to_device[$j][1]+1;}
+				}
+			}      
+		else{
 
-    }
+			$k= count($switch_to_device);
+			$switch_to_device[$k][0]= strval($switchdevices[$i]["switchID"]);
+			$switch_to_device[$k][1]=1;
+		}
+	}
 }
 ?>
 
@@ -27,21 +36,18 @@ if(count($switchdevices)>0){
         <script type="text/javascript">
             google.charts.load('current', {packages: ['corechart']});
             google.charts.setOnLoadCallback(drawChart);
-
-            function drawChart() {
+			function drawChart() {
                 // Define the chart to be drawn.
                 var data = new google.visualization.DataTable();
-                data.addColumn('number', 'switchID');
-                data.addColumn('number', 'deviceID');
+                data.addColumn('string', 'switchID');
+                data.addColumn('number', 'deviceIDs associated');
                 data.addRows(<?php echo(json_encode($switch_to_device)) ?>);
                 var options = {'title':'Devices and Switches association',
                     'orientation': 'horizontal',
-                    hAxis: {title: 'switchID', minValue: 0},
-                    vAxis: {title: 'deviceID', minValue: 0},
                     'width':'100%',
                     'height':500};
                 // Instantiate and draw the chart.
-                var chart = new google.visualization.ScatterChart(document.getElementById('SwitchDevicesScatterPlot'));
+                var chart = new google.visualization.BarChart(document.getElementById('SwitchDevicesScatterPlot'));
                 chart.draw(data, options);
             }
         </script>
