@@ -4,7 +4,7 @@
 
 import sys
 from settings import Session, engine, Base
-from calcSSTargetedByTime import calculateTargetedSSByTime
+from calcTargetedSSByTime import calculateTargetedSSByTime
 from calcTargetedSS import calculateTargetedSS
 from models import SuspiciousnessScores, Devices
 
