@@ -22,6 +22,6 @@ for rec in records:
     device_id = rec.deviceID
     row_count = row_count+1
     calculateTargetedSS(row_count,trace_id,device_id)
-    calculateTargetedSSByTime(trace_id, device_id)
+    #calculateTargetedSSByTime(trace_id, device_id)
     
 print('executed')
