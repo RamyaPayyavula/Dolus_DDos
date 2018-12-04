@@ -25,9 +25,9 @@ if(count($rootswitch_logs)>0)
                 else{
                         $k= count($root_switchdata);
 
-                        $root_switchdata[$k][0] = strval($rootswitch_logs[$i]['unixtimestamp']);
+                        $root_switchdata[$k][0] = strval(gmdate("Y-m-d H:i:s", $rootswitch_logs[$i]['unixtimestamp']));
                         $root_switchdata[$k][1] = ($rootswitch_logs[$i]['tx_bytes'] + $rootswitch_logs[$i]['rx_bytes'])*8;
-                        $totalnetwork_bandwidth[$k][0] = strval($rootswitch_logs[$i]['unixtimestamp']);
+                        $totalnetwork_bandwidth[$k][0] = strval(gmdate("Y-m-d H:i:s",$rootswitch_logs[$i]['unixtimestamp']));
                         $totalnetwork_bandwidth[$k][1] = ($rootswitch_logs[$i]['total_bytes'])*8;
                 }
 
@@ -51,13 +51,13 @@ if(count($slaveswitch_logs)>0)
                 }
                 else{
                         $k= count($slave_switchdata);
-                        $slave_switchdata[$k][0] = strval($slaveswitch_logs[$i]['unixtimestamp']);
-                        $slave_switchdata[$k][1] = ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*18;
+                        $slave_switchdata[$k][0] = strval(gmdate("Y-m-d H:i:s",$slaveswitch_logs[$i]['unixtimestamp']));
+                        $slave_switchdata[$k][1] = ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
                 }
 
-                if(array_search($slaveswitch_logs[$i]['unixtimestamp'], array_column($totalnetwork_bandwidth, '0')) !== False){
+                if(array_search(strval(gmdate("Y-m-d H:i:s",$slaveswitch_logs[$i]['unixtimestamp'])), array_column($totalnetwork_bandwidth, '0')) !== False){
                         for($j=0; $j<count($totalnetwork_bandwidth);$j++){
-                                if(strval($slaveswitch_logs[$i]['unixtimestamp']) == $totalnetwork_bandwidth[$j][0]){
+                                if(strval(gmdate("Y-m-d H:i:s",$slaveswitch_logs[$i]['unixtimestamp'])) == $totalnetwork_bandwidth[$j][0]){
                                         $totalnetwork_bandwidth[$j][1] = $totalnetwork_bandwidth[$j][1] + ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
                                 }
                         }
@@ -65,7 +65,7 @@ if(count($slaveswitch_logs)>0)
                 else{
                         $m= count($totalnetwork_bandwidth);
                        
-                        $totalnetwork_bandwidth[$m][0] = strval($slaveswitch_logs[$i]['unixtimestamp']);
+                        $totalnetwork_bandwidth[$m][0] = strval(gmdate("Y-m-d H:i:s",$slaveswitch_logs[$i]['unixtimestamp']));
 						 $totalnetwork_bandwidth[$m][1] = ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
                 }
         }
