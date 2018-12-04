@@ -1,17 +1,24 @@
 <?php
 $qvms = $info['qvms'];
+
+$blacklistIps = $info['blacklistIps'];
+$devices = $info['devices'];
+
 $qvms_used_on_months = array(["Jan",0],["Feb",0],["March",0],["Apr",0],["May",0],["Jun",0],[ "Jul",0],["Aug",0],["Sep",0],[ "Oct",0],["Nov",0],["Dec",0]);
-$attackers_types=array(["Active Attacker's",0],["In Active Attacker's",0]);
+
+$attackers_types=array(["Active/InActive Attacker's",0],["Benign User's",0]);
+
 if(count($qvms) > 0){
     for($i=0; $i<count($qvms);$i++){
         $mon = date("m",strtotime($qvms[$i]["qvmStartTime"]));
         $qvms_used_on_months[$mon-1][1] =  $qvms_used_on_months[$mon-1][1]+1;
-        if(($qvms[$i]["currentlyActive"])>0){
-            $attackers_types[0][1]=$attackers_types[0][1]+1;
+         if(count($devices)>0){
+            $attackers_types[0][1]=count($devices);;
         }
-        else{
-            $attackers_types[1][1]=$attackers_types[1][1]+1;
+        if(count($blacklistIps)>0){
+            $attackers_types[1][1]=count($blacklistIps);
         }
+
     }
 }
 ?>
@@ -38,7 +45,7 @@ if(count($qvms) > 0){
                 data1.addColumn('string', 'QVMS');
                 data1.addColumn('number', 'No of Attackers');
                 data1.addRows(<?php echo(json_encode($attackers_types))?>);
-                var options1 = {'title':'Number of Attackers Active/Inactive per Month in the year 2018',
+                var options1 = {'title':'Active/Inactive attackers and benign users  per Month in the year 2018',
                     'orientation': 'horizontal',
                     'width':'100%',
                     'height':500};
