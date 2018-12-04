@@ -34,9 +34,10 @@ if(count($blacklistips) > 0){
                 var options = {'title':'Number of block listed IP\'s Per Month',
                     'orientation': 'horizontal',
                     'width':'100%',
+                    'colors':['red'],
                     'height':500};
                 // Instantiate and draw the chart.
-                var chart = new google.visualization.LineChart(document.getElementById('BlacklistIpsLineChart'));
+                var chart = new google.visualization.AreaChart(document.getElementById('BlacklistIpsLineChart'));
                 chart.draw(data, options);
             }
         </script>
