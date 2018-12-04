@@ -120,11 +120,11 @@ if(count($slaveswitch_logs)>0)
                                'width':'100%',
                                'height':500};
                 // Instantiate and draw the chart.
-                                var chart1 = new google.visualization.LineChart(document.getElementById('totalNewtorkGraph'));
+                                var chart1 = new google.visualization.AreaChart(document.getElementById('totalNewtorkGraph'));
                 chart1.draw(data1, options1);
-                var chart2 = new google.visualization.LineChart(document.getElementById('rootSwitchGraph'));
+                var chart2 = new google.visualization.AreaChart(document.getElementById('rootSwitchGraph'));
                 chart2.draw(data2, options2);
-                                var chart3 = new google.visualization.LineChart(document.getElementById('slaveSwitchGraph'));
+                                var chart3 = new google.visualization.AreaChart(document.getElementById('slaveSwitchGraph'));
                 chart3.draw(data3, options3);
             }
         </script>
