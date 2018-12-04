@@ -34,6 +34,22 @@ if [[ $EUID -ne 0 ]] ; then
     exit
 fi
 
+#Check to see if an argument has been supplied. If not, exit the script.
+if [ -z "$2" ] ; then
+    echo -e "${RED}Incorrect number of arguments supplied. Please supply the DPID numbers of the root switch and the slave switch as arguments. Exiting.${NC}"
+    exit
+fi
+
+regex='^[0-9]+$'
+
+if ! { [[ "$1" =~ $regex ]] && [[ "$2" =~ $regex ]]; } ; then
+    echo -e "${RED}One or multiple of the DPID numbers you entered was not an integer. Please ensure both DPID numbers are integers when entering them as arguments. Exiting.${NC}"
+    exit
+fi
+
+rootDPID=$1
+slaveDPID=$2
+
 #First, set the apache default site to point to /var/www/public_html and restart the apache2 server.
 echo -e "${BLUE}Configuring the Apache server...${NC}"
 cd /etc/apache2/sites-enabled
@@ -104,6 +120,30 @@ sudo pip install sqlalchemy || checkErr "SQLAlchemy installation"
 sudo pip install pymysql frenetic pycurl || checkErr "Python dependency installation"
 
 python app/Python/models.py || checkErr "Running app/Python/models.py"
+
+#Before running defaultDataInsertion.py, we'll need to change the DPID numbers in the file to match the ones input as arguments to this script.
+
+#Change the DPID numbers for the first three instances of switchID to the root switch's DPID number.
+awk -v rootDPID="$rootDPID" 'BEGIN {matches=0}
+     matches < 3 && /.*switchID.*/ { sub(/switchID=.[0-9]+./,"switchID=\""rootDPID"\""); matches++ }
+     { print $0 }' defaultDataInsertion.py > defaultDataInsertion.py.1
+
+#Change the DPID numbers for the next six instances of switchID to the slave switch's DPID number.
+awk -v slaveDPID="$slaveDPID" 'BEGIN {matches=0}
+    matches >= 3 && matches < 9 && /.*switchID.*/ { sub(/switchID=.[0-9]+./,"switchID=\""slaveDPID"\"") }
+    /.*switchID.*/ { matches++ }
+    { print $0 }' defaultDataInsertion.py.1 > defaultDataInsertion.py
+
+#Now, change the root switch's DPID number in the Switches objects array.
+awk -v rootDPID="$rootDPID" ' /.*root-switch.*/ { sub(/switchID=.[0-9]+./,"switchID=\""rootDPID"\"")}
+     { print $0 }' defaultDataInsertion.py > defaultDataInsertion.py.1
+
+#Do the same for the slave switch's DPID number.
+awk -v slaveDPID="$slaveDPID" ' /.*slave-switch.*/ { sub(/switchID=.[0-9]+./,"switchID=\""slaveDPID"\"")}
+     { print $0 }' defaultDataInsertion.py.1 > defaultDataInsertion.py
+
+rm -f defaultDataInsertion.py.1
+
 python app/Python/defaultDataInsertion.py || checkErr "Running app/Python/defaultDataInsertion.py"
 echo -e "${GREEN}The AdminUI webpage has been configured properly!"
 
