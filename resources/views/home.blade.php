@@ -1,5 +1,4 @@
 <?php
-
 $qvms = $info['qvms'];
 $servers = $info['servers'];
 $users = $info['users'];
@@ -10,67 +9,68 @@ $root_switchdata = array();
 $slave_switchdata = array();
 if(count($rootswitch_logs)>0)
 {
-	
-	for($i=0;$i<count($rootswitch_logs);$i++)
-	{
-		if(array_search($rootswitch_logs[$i]['unixtimestamp'], array_column($root_switchdata, '0')) !== False)
-		{
-			for($j =0; $j<count($root_switchdata);$j++){
-				if(strval($rootswitch_logs[$i]['unixtimestamp']) == $root_switchdata[$j][0]){
-					$root_switchdata[$j][1] = $root_switchdata[$j][1] + ($rootswitch_logs[$i]['tx_bytes'] + $rootswitch_logs[$i]['rx_bytes'])*8;
-					$totalnetwork_bandwidth[$j][1] = $totalnetwork_bandwidth[$j][1]+($rootswitch_logs[$i]['tx_bytes'] + $rootswitch_logs[$i]['rx_bytes'])*8;
 
-				}
-			}
-		}     
-		else{
-			$k= count($root_switchdata);
-			$root_switchdata[$k][0] = strval($rootswitch_logs[$i]['unixtimestamp']);
-			$root_switchdata[$k][1] = ($rootswitch_logs[$i]['tx_bytes'] + $rootswitch_logs[$i]['rx_bytes'])*8;
-			$totalnetwork_bandwidth[$k][0] = strval($rootswitch_logs[$i]['unixtimestamp']);
-			$totalnetwork_bandwidth[$k][1] = ($rootswitch_logs[$i]['total_bytes'])*8;
-		}
-		
-	    
-	}
+        for($i=0;$i<count($rootswitch_logs);$i++)
+        {
+                if(array_search($rootswitch_logs[$i]['unixtimestamp'], array_column($root_switchdata, '0')) !== False)
+                {
+                        for($j =0; $j<count($root_switchdata);$j++){
+                                if(strval($rootswitch_logs[$i]['unixtimestamp']) == $root_switchdata[$j][0]){
+                                        $root_switchdata[$j][1] = $root_switchdata[$j][1] + ($rootswitch_logs[$i]['tx_bytes'] + $rootswitch_logs[$i]['rx_bytes'])*8;
+                                        $totalnetwork_bandwidth[$j][1] = $totalnetwork_bandwidth[$j][1]+($rootswitch_logs[$i]['tx_bytes'] + $rootswitch_logs[$i]['rx_bytes'])*8;
+
+                                }
+                        }
+                }
+                else{
+                        $k= count($root_switchdata);
+
+                        $root_switchdata[$k][0] = strval($rootswitch_logs[$i]['unixtimestamp']);
+                        $root_switchdata[$k][1] = ($rootswitch_logs[$i]['tx_bytes'] + $rootswitch_logs[$i]['rx_bytes'])*8;
+                        $totalnetwork_bandwidth[$k][0] = strval($rootswitch_logs[$i]['unixtimestamp']);
+                        $totalnetwork_bandwidth[$k][1] = ($rootswitch_logs[$i]['total_bytes'])*8;
+                }
+
+
+        }
 }
 
 if(count($slaveswitch_logs)>0)
 {
 
 
-	for($i=0;$i<count($slaveswitch_logs);$i++)
-	{
-		
-		if(array_search($slaveswitch_logs[$i]['unixtimestamp'], array_column($slave_switchdata, '0')) !== False)
-		{
-			for($j =0; $j<count($slave_switchdata);$j++){
-				if(strval($slaveswitch_logs[$i]['unixtimestamp']) == $slave_switchdata[$j][0]){
-					$slave_switchdata[$j][1] = $slave_switchdata[$j][1]+($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
-				}
-			}
-		}     
-		else{
-			$k= count($slave_switchdata);
-			$slave_switchdata[$k][0] = strval($slaveswitch_logs[$i]['unixtimestamp']);
-			$slave_switchdata[$k][1] = ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
-		}
-			
-		if(array_search($slaveswitch_logs[$i]['unixtimestamp'], array_column($totalnetwork_bandwidth, '0')) !== False){
-			for($j=0; $j<count($totalnetwork_bandwidth);$j++){
-				if(strval($slaveswitch_logs[$i]['unixtimestamp']) == $totalnetwork_bandwidth[$j][0]){
-					$totalnetwork_bandwidth[$j][1] = $totalnetwork_bandwidth[$j][1] + ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
-				}
-			}   
-		}
-		else{
-			$m= count($root_switchdata);
-			$totalnetwork_bandwidth[$m][1] = ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
-			$totalnetwork_bandwidth[$m][0] = strval($slaveswitch_logs[$i]['unixtimestamp']);
-		}
-	}
-}
+        for($i=0;$i<count($slaveswitch_logs);$i++)
+        {
+			if(array_search($slaveswitch_logs[$i]['unixtimestamp'], array_column($slave_switchdata, '0')) !== False)
+                {
+                    for($j =0; $j<count($slave_switchdata);$j++){
+                        if(strval($slaveswitch_logs[$i]['unixtimestamp']) == $slave_switchdata[$j][0]){
+                             $slave_switchdata[$j][1] = $slave_switchdata[$j][1] + ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
+                                }
+                        }
+                }
+                else{
+                        $k= count($slave_switchdata);
+                        $slave_switchdata[$k][0] = strval($slaveswitch_logs[$i]['unixtimestamp']);
+                        $slave_switchdata[$k][1] = ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*18;
+                }
 
+                if(array_search($slaveswitch_logs[$i]['unixtimestamp'], array_column($totalnetwork_bandwidth, '0')) !== False){
+                        for($j=0; $j<count($totalnetwork_bandwidth);$j++){
+                                if(strval($slaveswitch_logs[$i]['unixtimestamp']) == $totalnetwork_bandwidth[$j][0]){
+                                        $totalnetwork_bandwidth[$j][1] = $totalnetwork_bandwidth[$j][1] + ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
+                                }
+                        }
+                }
+                else{
+                        $m= count($totalnetwork_bandwidth);
+                       
+                        $totalnetwork_bandwidth[$m][0] = strval($slaveswitch_logs[$i]['unixtimestamp']);
+						 $totalnetwork_bandwidth[$m][1] = ($slaveswitch_logs[$i]['tx_bytes'] + $slaveswitch_logs[$i]['rx_bytes'])*8;
+                }
+        }
+}
+#dd($totalnetwork_bandwidth);
 ?>
 
 @extends('layouts.master')
@@ -84,20 +84,22 @@ if(count($slaveswitch_logs)>0)
         <title>MTD | Blacklist</title>
 
         <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
-
-        <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+                                      
+									   <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-		<script type="text/javascript">
+                <script type="text/javascript">
             google.charts.load('current', {packages: ['corechart']});
             google.charts.setOnLoadCallback(drawChart);
+			//var totalnetwork = <?php echo(json_encode($totalnetwork_bandwidth)) ?>;
+			//totalnetwork.unshift(['DateTime','Total bandwidth utilization']);
             function drawChart() {
                 // Define the chart to be drawn.
-				var today = <?php echo(json_encode(date("F j, Y"))); ?>
-				var data1 = new google.visualization.DataTable();
+                                var today = <?php echo(json_encode(date("F j, Y"))); ?>;
+                                var data1 = new google.visualization.DataTable();
                 data1.addColumn('string', 'Date - Time');
                 data1.addColumn('number', 'Bandwidth Utilization');
-                data1.addRows(<?php echo(json_encode($totalnetwork_bandwidth)) ?>);
-                var options1 = {'title':'Newtork bandwidth utilization on '.data,
+				data1.addRows(<?php echo(json_encode($totalnetwork_bandwidth)) ?>);
+                var options1 = {'title':'Newtork bandwidth utilization  ',
                                'orientation': 'horizontal',
                                'width':'100%',
                                'height':500};
@@ -105,31 +107,33 @@ if(count($slaveswitch_logs)>0)
                 data2.addColumn('string', 'Date - Time');
                 data2.addColumn('number', 'Bandwidth Utilization');
                 data2.addRows(<?php echo(json_encode($root_switchdata)) ?>);
-                var options2 = {'title':'root switch bandwidth utilization on '.data,
+                var options2 = {'title':'root switch bandwidth utilization on ',
                                'orientation': 'horizontal',
                                'width':'100%',
                                'height':500};
-			    var data3 = new google.visualization.DataTable();
+                            var data3 = new google.visualization.DataTable();
                 data3.addColumn('string', 'Date - Time');
                 data3.addColumn('number', 'Bandwidth Utilization');
                 data3.addRows(<?php echo(json_encode($slave_switchdata)) ?>);
-                var options3 = {'title':'slave switch bandwidth utilization on '.data,
+                var options3 = {'title':'slave switch bandwidth utilization on ',
                                'orientation': 'horizontal',
                                'width':'100%',
                                'height':500};
                 // Instantiate and draw the chart.
-				var chart1 = new google.visualization.LineChart(document.getElementById('totalNewtorkGraph'));
+                                var chart1 = new google.visualization.LineChart(document.getElementById('totalNewtorkGraph'));
                 chart1.draw(data1, options1);
                 var chart2 = new google.visualization.LineChart(document.getElementById('rootSwitchGraph'));
                 chart2.draw(data2, options2);
-				var chart3 = new google.visualization.LineChart(document.getElementById('slaveSwitchGraph'));
+                                var chart3 = new google.visualization.LineChart(document.getElementById('slaveSwitchGraph'));
                 chart3.draw(data3, options3);
             }
         </script>
 
         <style>
             .info-box-number{
-                font-size:32px;
+                            
+							
+							 font-size:32px;
             }
             span.label{
                 font-size:12px;
@@ -174,7 +178,7 @@ if(count($slaveswitch_logs)>0)
                         <!-- /.info-box -->
                     </div>
                     <!-- /.col -->
-                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                   <div class="col-md-4 col-sm-6 col-xs-12">
                         <a href={{ route('pages.users')}}>
                             <div class="info-box">
                                 <span class="info-box-icon bg-green"><i class="fa fa-users"></i></span>
@@ -219,14 +223,14 @@ if(count($slaveswitch_logs)>0)
 
                                 <h3 class="box-title">Bandwidth Utilization</h3>
                                 <div class="box-tools pull-right">
-                                    <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
+                                                        <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
                                     </button>
 
                             </div>
                             <div class="box-body">
-								<div id="totalNewtorkGraph" style="height: 100%; width:100%"></div>
-                             </div>                            
-							 </div>
+                                                                <div id="totalNewtorkGraph" style="height: 100%; width:100%"></div>
+                             </div>
+                                                         </div>
                             <!-- /.box-body-->
                         </div>
                         <!-- /.box -->
@@ -252,8 +256,8 @@ if(count($slaveswitch_logs)>0)
 
                             </div>
                             <div class="box-body">
-								<div id="rootSwitchGraph" style="height: 100%; width:100%"></div> 
-							</div>
+                                                                <div id="rootSwitchGraph" style="height: 100%; width:100%"></div>
+                                                        </div>
                             <!-- /.box-body-->
                         </div>
                         <!-- /.box -->
@@ -262,7 +266,8 @@ if(count($slaveswitch_logs)>0)
 
                     <div class="col-xs-6">
                         <!-- interactive chart -->
-                        <div class="box box-primary">
+                                                     
+													  <div class="box box-primary">
                             <div class="box-header with-border">
                                 <i class="fa fa-line-chart"></i>
 
@@ -275,7 +280,7 @@ if(count($slaveswitch_logs)>0)
 
                             </div>
                             <div class="box-body">
-							<div id="slaveSwitchGraph" style="height: 100%; width:100%"></div> 
+                                                        <div id="slaveSwitchGraph" style="height: 100%; width:100%"></div>
                             </div>
                         </div>
                             <!-- /.box-body-->
@@ -292,8 +297,10 @@ if(count($slaveswitch_logs)>0)
 
     </div>
     <!-- ./wrapper -->
-	<div>
+        <div>
 </body>
 </html>
 
 @endsection
+                               
+									  
