@@ -44,8 +44,9 @@ public function getServerDetails(Request $request)
     {
         $home_wrapper= new HomeWrapperClass();
         $qvms=$home_wrapper->getAllQVMs();
-
-        $info=array('qvms'=>$qvms);
+        $devices=$home_wrapper->getAllDevices();
+        $blacklistIps=$home_wrapper->getAllBlacklistIPs();
+        $info=array('qvms'=>$qvms,'blacklistIps'=>$blacklistIps,'devices'=>$devices);
 
         return view('pages/qvms')->with('info', $info);
     }
