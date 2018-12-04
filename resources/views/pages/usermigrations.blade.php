@@ -44,9 +44,10 @@ if(count($userMigrations) > 0){
                 var options = {'title':'Number of User Migrated per Month',
                     'orientation': 'horizontal',
                     'width':'100%',
+                    'colors':['green'],
                     'height':500};
                 // Instantiate and draw the chart.
-                var chart = new google.visualization.LineChart(document.getElementById('UserMigrationsLineChart'));
+                var chart = new google.visualization.AreaChart(document.getElementById('UserMigrationsLineChart'));
                 chart.draw(data, options);
             }
         </script>
