@@ -43,9 +43,10 @@ if(count($attackHistory) > 0){
                 var options = {'title':'Number of Attackers attaked per Month in the year 2018',
                     'orientation': 'horizontal',
                     'width':'100%',
+                    'colors':['red'],
                     'height':500};
                 // Instantiate and draw the chart.
-                var chart = new google.visualization.LineChart(document.getElementById('AttackhistoryLineChart'));
+                var chart = new google.visualization.AreaChart(document.getElementById('AttackhistoryLineChart'));
                 chart.draw(data, options);
             }
         </script>
