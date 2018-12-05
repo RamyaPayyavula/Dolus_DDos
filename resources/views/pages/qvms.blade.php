@@ -6,7 +6,7 @@ $devices = $info['devices'];
 
 $qvms_used_on_months = array(["Jan",0],["Feb",0],["March",0],["Apr",0],["May",0],["Jun",0],[ "Jul",0],["Aug",0],["Sep",0],[ "Oct",0],["Nov",0],["Dec",0]);
 
-$attackers_types=array(["Active/InActive Attacker's",0],["Benign User's",0]);
+$attackers_types=array(["Benign User's",0],["Active/InActive Attacker's",0]);
 
 if(count($qvms) > 0){
     for($i=0; $i<count($qvms);$i++){
@@ -42,10 +42,10 @@ if(count($qvms) > 0){
             function drawChart() {
                 // Define the chart to be drawn.
                 var data1 = new google.visualization.DataTable();
-                data1.addColumn('string', 'QVMS');
+                data1.addColumn('string', 'type of users');
                 data1.addColumn('number', 'No of Attackers');
                 data1.addRows(<?php echo(json_encode($attackers_types))?>);
-                var options1 = {'title':'Active/Inactive attackers and benign users  per Month in the year 2018',
+                var options1 = {'title':'Active/Inactive attackers and benign users per Month in the year 2018',
                     'orientation': 'horizontal',
                     'width':'100%',
                     'height':500};
@@ -152,7 +152,7 @@ if(count($qvms) > 0){
                         <div class="box-header with-border">
                             <i class="fa fa-bar-chart-o"></i>
 
-                            <h3 class="box-title">Number of QVM's and Attackers Active Per Month</h3>
+                            <h3 class="box-title">Number of Benign users and Attackers Active/Inactive Per Month</h3>
 
                             <div class="box-tools pull-right">
                                 <button type="button" onclick="location.reload();" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-refresh"></i>
