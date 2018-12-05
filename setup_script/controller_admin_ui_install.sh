@@ -14,13 +14,14 @@ NC='\033[0m' # No Color
 
 #Ignore the weird spacing. I promise it looks good when it's echoed out to the screen.
 echo -e ${LIGHTBLUE}"################################################################"
-echo "# DDoS Lab 2 Controller AdminUI Configuration Script  #"
+echo "# DDoS Lab 2 Controller AdminUI Configuration Script           #"
 echo "#                                                              #"
-echo -e "# ${LIGHTGREEN}Syntax: sudo ./controller_admin_ui_install.sh                   ${LIGHTBLUE}      #"
+echo -e "# ${LIGHTGREEN}Syntax: sudo ./controller_admin_ui_install.sh  $rootDPID $slaveDPID ${LIGHTBLUE}            #"
 echo "#                                                              #"
 echo "# This script will install and configure the AdminUI software  #"
 echo "# on the controller, and ensure that it is                     #"
-echo "# configured properly.                                         #"
+echo "# configured properly. The required arguments are the          #"
+echo "# root-switch and slave-switch DPID numbers.                   #"
 echo -e "################################################################"${NC}
 echo "" #Acts as a newline by outputting nothing.
 
@@ -126,23 +127,23 @@ python app/Python/models.py || checkErr "Running app/Python/models.py"
 #Change the DPID numbers for the first three instances of switchID to the root switch's DPID number.
 awk -v rootDPID="$rootDPID" 'BEGIN {matches=0}
      matches < 3 && /.*switchID.*/ { sub(/switchID=.[0-9]+./,"switchID=\""rootDPID"\""); matches++ }
-     { print $0 }' defaultDataInsertion.py > defaultDataInsertion.py.1
+     { print $0 }' app/Python/defaultDataInsertion.py > app/Python/defaultDataInsertion.py.1
 
 #Change the DPID numbers for the next six instances of switchID to the slave switch's DPID number.
 awk -v slaveDPID="$slaveDPID" 'BEGIN {matches=0}
     matches >= 3 && matches < 9 && /.*switchID.*/ { sub(/switchID=.[0-9]+./,"switchID=\""slaveDPID"\"") }
     /.*switchID.*/ { matches++ }
-    { print $0 }' defaultDataInsertion.py.1 > defaultDataInsertion.py
+    { print $0 }' app/Python/defaultDataInsertion.py.1 > app/Python/defaultDataInsertion.py
 
 #Now, change the root switch's DPID number in the Switches objects array.
 awk -v rootDPID="$rootDPID" ' /.*root-switch.*/ { sub(/switchID=.[0-9]+./,"switchID=\""rootDPID"\"")}
-     { print $0 }' defaultDataInsertion.py > defaultDataInsertion.py.1
+     { print $0 }' app/Python/defaultDataInsertion.py > app/Python/defaultDataInsertion.py.1
 
 #Do the same for the slave switch's DPID number.
 awk -v slaveDPID="$slaveDPID" ' /.*slave-switch.*/ { sub(/switchID=.[0-9]+./,"switchID=\""slaveDPID"\"")}
-     { print $0 }' defaultDataInsertion.py.1 > defaultDataInsertion.py
+     { print $0 }' app/Python/defaultDataInsertion.py.1 > app/Python/defaultDataInsertion.py
 
-rm -f defaultDataInsertion.py.1
+rm -f app/Python/defaultDataInsertion.py.1
 
 python app/Python/defaultDataInsertion.py || checkErr "Running app/Python/defaultDataInsertion.py"
 echo -e "${GREEN}The AdminUI webpage has been configured properly!"
