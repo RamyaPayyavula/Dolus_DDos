@@ -18,7 +18,10 @@ else:
 
 records = session.query(Devices).all()
 lastssID = session.query(SuspiciousnessScores).order_by(SuspiciousnessScores.SSID.desc()).first()
-row_count = lastssID.SSID
+if lastssID is None:
+    row_count=0
+else:
+    row_count = lastssID.SSID
 for rec in records:
     device_id = rec.deviceID
     row_count = row_count+1
