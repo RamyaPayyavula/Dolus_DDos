@@ -142,9 +142,10 @@ public function getServerDetails(Request $request)
                              }
                          }
                      }
+                     $macaddress = $device_details[0]['mac'];
                      if($blacklist){
-                         $macaddress = $device_details[0]['mac'];
                          $home_wrapper->insertIntoBlackLists($sourceIP,$macaddress);
+                     }
                          $home_wrapper->insertIntoAttacks($attacker_id,$sourceIP,$destinationIP);
                          $home_wrapper->insertIntoUserMigrations($userMigrationsUID,$sourceIP,$destinationIP,$migratedServerIP);
                          $no_of_attacks = $home_wrapper->getNoofAttackers();
@@ -172,7 +173,7 @@ public function getServerDetails(Request $request)
                          }
 
 
-                     }
+                     
                  }
              }
         }
