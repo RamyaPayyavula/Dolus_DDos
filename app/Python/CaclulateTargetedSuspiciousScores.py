@@ -17,7 +17,8 @@ else:
     trace_id = lastrecord.traceID +1
 
 records = session.query(Devices).all()
-row_count = session.query(SuspiciousnessScores).count()
+lastssID = session.query(SuspiciousnessScores).order_by(SuspiciousnessScores.SSID.desc()).first()
+row_count = lastssID.SSID
 for rec in records:
     device_id = rec.deviceID
     row_count = row_count+1
