@@ -114,13 +114,13 @@ public function getServerDetails(Request $request)
                  $device_details = $home_wrapper->getADevices($device_id);
                  $qvm_details = $home_wrapper->getAllQVMs();
                  $no_of_qvms = count($qvm_details);
-                 if($score>1){
+                 if($score>=1){
                      $all_attacks = $home_wrapper->getAllAttacks();
                      $attacker_id= 'attack'.strval(count($all_attacks)+1);
                      $sourceIP= $device_details[0]['ipv4'];
                      $packet_details = $home_wrapper->getAllPacketLogsByDevice($sourceIP);
                      $no_of_logs=count($packet_details);
-                     $destinationIP = $packet_details[$no_of_logs-1]['ip_dst'];
+                     $destinationIP = $packet_details[$no_of_logs-100]['ip_dst'];
                      //$home_wrapper->insertIntoAttacks($attacker_id,$sourceIP,$destinationIP);
                      $all_migrations = $home_wrapper->getAllUserMigrations();
                      $userMigrationsUID ='migration'.strval(count($all_migrations));
