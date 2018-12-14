@@ -101,7 +101,7 @@ sudo rm o
 
 #Change PHP configuration files
 
-cd etc/php/7.0/apache2/
+cd /etc/php/7.0/apache2/
 
 sudo sed -i "s/.*php_pdo_mysql.*/extension=php_pdo_mysql.dll/" php.ini
 
